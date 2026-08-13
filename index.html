@@ -680,6 +680,138 @@
     .stat-box .v{ font-size:14px; }
   }
 
+
+
+  /* ============ PPT-BASED QUIZ — ISOLATED EXTENSION ============ */
+  .btn-ppt-launch{
+    width:100%;
+    margin-top:10px;
+    padding:11px 18px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,0.025);
+    color:var(--text-hi);
+    font-size:13px;
+  }
+  .btn-ppt-launch:hover{ border-color:var(--cyan); background:rgba(55,211,224,0.06); }
+  .ppt-launch-note{
+    text-align:center;
+    margin-top:7px;
+    color:var(--text-low);
+    font-family:var(--mono);
+    font-size:9.5px;
+    letter-spacing:.03em;
+  }
+  #ppt-screen-start,
+  #ppt-screen-quiz,
+  #ppt-screen-results{ overflow-y:auto; }
+  #ppt-screen-start{ align-items:center; justify-content:center; }
+  .ppt-start-card{ width:100%; max-width:620px; }
+  .ppt-start-card .start-card{ max-width:none; }
+  .ppt-start-card .ppt-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:5px 9px; margin-bottom:10px;
+    border:1px solid rgba(55,211,224,.25); border-radius:20px;
+    color:var(--cyan); background:rgba(55,211,224,.05);
+    font-family:var(--mono); font-size:10px;
+  }
+  .ppt-back-row{ margin-top:10px; }
+  .ppt-back-row .btn-ghost{ width:100%; }
+  .ppt-quiz-shell{ height:100%; min-height:0; display:flex; flex-direction:column; gap:10px; }
+  .ppt-status-bar{
+    flex:0 0 auto; display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap;
+  }
+  .ppt-status-left{ font-family:var(--mono); font-size:12.5px; color:var(--text-mid); }
+  .ppt-status-left b{ color:var(--text-hi); }
+  .ppt-status-mid{ display:flex; gap:8px; }
+  .ppt-badge{
+    font-family:var(--mono); font-size:11.5px; padding:5px 10px; border-radius:6px;
+    border:1px solid var(--border-soft); display:flex; align-items:center; gap:5px;
+  }
+  .ppt-badge.correct{ color:var(--green); border-color:rgba(57,217,138,.3); background:rgba(57,217,138,.06); }
+  .ppt-badge.wrong{ color:var(--red); border-color:rgba(255,92,114,.3); background:rgba(255,92,114,.06); }
+  .ppt-badge.timer{ color:var(--text-hi); border-color:var(--border); background:rgba(255,255,255,.02); min-width:76px; justify-content:center; }
+  .ppt-badge.timer.warn{ color:var(--yellow); border-color:rgba(245,200,76,.4); background:rgba(245,200,76,.08); animation:ppt-pulse-warn 1.4s ease-in-out infinite; }
+  @keyframes ppt-pulse-warn{0%,100%{opacity:1}50%{opacity:.55}}
+  .ppt-progress-track{ flex:0 0 auto; height:6px; border-radius:6px; background:var(--panel-2); border:1px solid var(--border-soft); overflow:hidden; }
+  .ppt-progress-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--blue),var(--cyan)); transition:width .3s ease; }
+  .ppt-progress-label{ font-family:var(--mono); font-size:10px; color:var(--text-low); text-align:right; margin-top:-5px; }
+  .ppt-nav-strip{ flex:0 0 auto; display:flex; gap:5px; overflow-x:auto; padding:2px 2px 6px; scrollbar-width:thin; }
+  .ppt-nav-num{
+    flex:0 0 auto; width:26px; height:26px; border-radius:5px; border:1px solid var(--border-soft);
+    background:rgba(255,255,255,.02); color:var(--text-low); font-family:var(--mono); font-size:9.5px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .ppt-nav-num.current{ border-color:var(--cyan); color:var(--cyan); background:rgba(55,211,224,.1); box-shadow:0 0 0 2px rgba(55,211,224,.12); }
+  .ppt-nav-num.answered{ border-color:rgba(57,217,138,.35); color:var(--green); background:rgba(57,217,138,.07); }
+  .ppt-question-area{
+    flex:1 1 auto; min-height:0; display:flex; flex-direction:column;
+    border:1px solid var(--border); border-radius:var(--radius);
+    background:linear-gradient(165deg,rgba(16,25,45,.55),rgba(9,13,24,.55)); padding:20px 22px; overflow:hidden;
+  }
+  .ppt-q-meta{ flex:0 0 auto; font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--cyan); margin-bottom:8px; }
+  .ppt-q-text{ flex:0 1 auto; font-size:clamp(14px,2.1vw,19px); line-height:1.42; color:var(--text-hi); font-weight:560; margin:0 0 14px; overflow:auto; max-height:32%; min-height:0; }
+  .ppt-options-grid{ flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:10px; }
+  .ppt-opt-card{
+    display:flex; align-items:center; gap:10px; text-align:left; border:1px solid var(--border);
+    background:rgba(255,255,255,.015); border-radius:var(--radius-sm); padding:10px 14px;
+    color:var(--text-hi); font-size:clamp(12px,1.35vw,14.5px); line-height:1.32; cursor:pointer;
+    transition:border-color .12s ease,background .12s ease,transform .1s ease; overflow:auto; min-height:0;
+  }
+  .ppt-opt-card:hover:not(.locked){ border-color:var(--blue); background:rgba(79,140,255,.08); }
+  .ppt-opt-card:active:not(.locked){ transform:scale(.995); }
+  .ppt-opt-card.selected{ border-color:var(--cyan); background:rgba(55,211,224,.09); box-shadow:0 0 0 2px rgba(55,211,224,.08); }
+  .ppt-opt-card.correct{ border-color:var(--green); background:rgba(57,217,138,.1); }
+  .ppt-opt-card.wrong{ border-color:var(--red); background:rgba(255,92,114,.1); }
+  .ppt-opt-card.muted{ opacity:.4; }
+  .ppt-opt-card.locked{ cursor:default; }
+  .ppt-opt-letter{ flex:0 0 auto; width:24px; height:24px; border-radius:6px; border:1px solid var(--border-soft); display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:11px; font-weight:700; color:var(--text-mid); }
+  .ppt-opt-card.selected .ppt-opt-letter{ border-color:var(--cyan); color:var(--cyan); background:rgba(55,211,224,.12); }
+  .ppt-opt-card.correct .ppt-opt-letter{ border-color:var(--green); color:var(--green); background:rgba(57,217,138,.15); }
+  .ppt-opt-card.wrong .ppt-opt-letter{ border-color:var(--red); color:var(--red); background:rgba(255,92,114,.15); }
+  .ppt-opt-label{ flex:1 1 auto; min-width:0; }
+  .ppt-action-row{ flex:0 0 auto; display:flex; justify-content:flex-end; gap:10px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border-soft); }
+  .ppt-check-btn{ background:linear-gradient(135deg,var(--cyan),var(--blue)); color:#04101f; font-size:13px; padding:11px 20px; white-space:nowrap; box-shadow:0 6px 18px -6px rgba(55,180,224,.5); }
+  .ppt-check-btn:disabled{ opacity:.45; cursor:not-allowed; box-shadow:none; }
+  .ppt-feedback-row{ display:none; align-items:flex-start; justify-content:space-between; gap:14px; margin-top:12px; padding-top:12px; border-top:1px solid var(--border-soft); }
+  .ppt-feedback-row.show{ display:flex; }
+  .ppt-fb-text{ flex:1 1 auto; min-width:0; font-size:12.5px; line-height:1.5; color:var(--text-mid); }
+  .ppt-fb-status{ font-weight:700; font-size:13.5px; margin-bottom:3px; }
+  .ppt-fb-status.ok{ color:var(--green); } .ppt-fb-status.no{ color:var(--red); }
+  .ppt-fb-text b{ color:var(--text-hi); }
+  .ppt-fb-why{ color:var(--text-low); font-size:11.5px; margin-top:4px; }
+  .ppt-next-btn{ flex:0 0 auto; background:linear-gradient(135deg,var(--cyan),var(--blue)); color:#04101f; font-size:13px; padding:11px 20px; white-space:nowrap; box-shadow:0 6px 18px -6px rgba(55,180,224,.5); }
+  .ppt-results-wrap{ width:100%; max-width:760px; margin:0 auto; }
+  .ppt-results-head{ text-align:center; margin-bottom:18px; }
+  .ppt-results-head h2{ font-size:24px; margin:0 0 4px; }
+  .ppt-results-head p{ color:var(--text-mid); font-size:13px; margin:0; }
+  .ppt-results-actions{ display:flex; gap:10px; margin-bottom:20px; }
+  .ppt-review-panel{ border:1px solid var(--border-soft); border-radius:var(--radius); padding:14px; }
+  .ppt-review-list{ max-height:340px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; }
+  .ppt-review-item{ border:1px solid var(--border-soft); border-radius:8px; overflow:hidden; }
+  .ppt-review-item summary{ list-style:none; cursor:pointer; padding:9px 12px; display:flex; align-items:center; gap:10px; font-size:12px; color:var(--text-mid); }
+  .ppt-review-item summary::-webkit-details-marker{display:none;}
+  .ppt-review-item .rq-num{ font-family:var(--mono); color:var(--text-low); flex:0 0 auto; width:34px; }
+  .ppt-review-item .rq-text{ flex:1 1 auto; color:var(--text-hi); font-size:12.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .ppt-review-item .rq-status{ flex:0 0 auto; font-family:var(--mono); font-size:10.5px; font-weight:700; }
+  .ppt-review-item.correct .rq-status{color:var(--green);} .ppt-review-item.wrong .rq-status{color:var(--red);}
+  .ppt-review-body{ padding:0 14px 12px 46px; font-size:12px; color:var(--text-mid); line-height:1.5; }
+  .ppt-review-body .ok{color:var(--green);} .ppt-review-body .no{color:var(--red);}
+  @media (max-width:760px){
+    .ppt-options-grid{grid-template-columns:1fr;grid-template-rows:repeat(4,1fr);}
+    .ppt-q-text{font-size:14px;max-height:28%;}
+    .ppt-opt-card{padding:8px 10px;font-size:12px;}
+    .ppt-question-area{padding:14px;}
+    .ppt-status-left{font-size:11px;}
+    .ppt-badge{font-size:10px;padding:4px 8px;}
+    .ppt-action-row,.ppt-feedback-row{flex-direction:column;}
+    .ppt-check-btn,.ppt-next-btn{width:100%;}
+  }
+  @media (max-width:420px){
+    .ppt-status-mid{gap:4px;flex-wrap:wrap;justify-content:flex-end;}
+    .ppt-badge{font-size:9px;padding:4px 6px;}
+  }
+
   .visually-hidden{
     position:absolute; width:1px; height:1px;
     overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap;
@@ -720,6 +852,9 @@
         </div>
 
         <button class="btn btn-primary" id="btn-start">Start Quiz →</button>
+
+        <button class="btn btn-ppt-launch" id="btn-ppt-open" type="button">📚 PPT-Based Quiz →</button>
+        <div class="ppt-launch-note">80 Questions · Comprehensive Coverage · Explanations</div>
 
         <div class="mini-cards">
           <div class="mini-card"><div class="mc-num">150</div><div class="mc-lab">Questions in bank</div></div>
@@ -820,8 +955,300 @@
       </div>
     </section>
 
+
+
+    <!-- ==================== PPT-BASED QUIZ ==================== -->
+    <section id="ppt-screen-start" class="screen">
+      <div class="ppt-start-card">
+        <div class="start-card">
+          <div class="ppt-badge">📚 PPT-BASED QUIZ</div>
+          <h1>80 Question Challenge</h1>
+          <p class="desc">Comprehensive revision of Immersive Technologies, Virtual Reality and Augmented Reality, with instant answer checking and short explanations.</p>
+          <div class="stat-row">
+            <div class="stat-pill"><div class="num">80</div><div class="lab">Questions</div></div>
+            <div class="stat-pill"><div class="num">60</div><div class="lab">Minutes</div></div>
+            <div class="stat-pill"><div class="num">4</div><div class="lab">Options / Q</div></div>
+            <div class="stat-pill"><div class="num">✓</div><div class="lab">Explanations</div></div>
+          </div>
+          <button class="btn btn-primary" id="ppt-btn-start" type="button">Start PPT Quiz →</button>
+          <div class="mini-cards">
+            <div class="mini-card"><div class="mc-num">80</div><div class="mc-lab">Questions in order</div></div>
+            <div class="mini-card"><div class="mc-num">01 → 80</div><div class="mc-lab">Sequential progression</div></div>
+            <div class="mini-card"><div class="mc-num">∞</div><div class="mc-lab">Retakes</div></div>
+          </div>
+          <div class="ppt-back-row"><button class="btn btn-ghost" id="ppt-btn-back-start" type="button">← Back to Quiz Menu</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ppt-screen-quiz" class="screen">
+      <div class="ppt-quiz-shell">
+        <div class="ppt-status-bar">
+          <div class="ppt-status-left">Question <b id="ppt-q-current">1</b> of <b>80</b></div>
+          <div class="ppt-status-mid">
+            <div class="ppt-badge correct">✓ <span id="ppt-score-correct">0</span> correct</div>
+            <div class="ppt-badge wrong">✕ <span id="ppt-score-wrong">0</span> wrong</div>
+            <div class="ppt-badge timer" id="ppt-timer-badge">60:00</div>
+          </div>
+        </div>
+        <div class="ppt-progress-track"><div class="ppt-progress-fill" id="ppt-progress-fill"></div></div>
+        <div class="ppt-progress-label" id="ppt-progress-label">1%</div>
+        <div class="ppt-nav-strip" id="ppt-nav-strip" aria-label="PPT quiz question progress"></div>
+        <div class="ppt-question-area">
+          <div class="ppt-q-meta" id="ppt-q-meta">IMMERSIVE TECHNOLOGIES</div>
+          <div class="ppt-q-text" id="ppt-q-text">Loading question...</div>
+          <div class="ppt-options-grid" id="ppt-options-grid"></div>
+          <div class="ppt-action-row" id="ppt-action-row">
+            <button class="btn ppt-check-btn" id="ppt-btn-check" type="button" disabled>Check Answer</button>
+          </div>
+          <div class="ppt-feedback-row" id="ppt-feedback-row">
+            <div class="ppt-fb-text">
+              <div class="ppt-fb-status" id="ppt-fb-status">✓ Correct!</div>
+              <div id="ppt-fb-correct-line"></div>
+              <div class="ppt-fb-why" id="ppt-fb-why"></div>
+            </div>
+            <button class="btn ppt-next-btn" id="ppt-btn-next" type="button">Next Question →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ppt-screen-results" class="screen">
+      <div class="ppt-results-wrap">
+        <div class="ppt-results-head">
+          <h2>PPT-Based Quiz Complete 🎉</h2>
+          <p>Your final performance on the 80-question PPT revision set.</p>
+        </div>
+        <div class="results-top">
+          <div class="ring-wrap">
+            <svg width="130" height="130" viewBox="0 0 130 130" aria-hidden="true">
+              <circle cx="65" cy="65" r="56" fill="none" stroke="#182238" stroke-width="10"></circle>
+              <circle id="ppt-ring-progress" cx="65" cy="65" r="56" fill="none" stroke="url(#pptRingGrad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="352" stroke-dashoffset="352"></circle>
+              <defs><linearGradient id="pptRingGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#37d3e0"></stop><stop offset="100%" stop-color="#4f8cff"></stop></linearGradient></defs>
+            </svg>
+            <div class="ring-label"><div class="pct" id="ppt-ring-pct">0%</div><div class="lab">Accuracy</div></div>
+          </div>
+          <div class="results-info">
+            <div class="score-line"><span id="ppt-res-score">0</span> <span>/ 80</span></div>
+            <div class="perf-msg" id="ppt-perf-msg">—</div>
+          </div>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-box"><div class="v" id="ppt-stat-correct">0</div><div class="l">Correct</div></div>
+          <div class="stat-box"><div class="v" id="ppt-stat-wrong">0</div><div class="l">Incorrect</div></div>
+          <div class="stat-box"><div class="v" id="ppt-stat-accuracy">0%</div><div class="l">Accuracy</div></div>
+          <div class="stat-box"><div class="v">80</div><div class="l">Total Qs</div></div>
+          <div class="stat-box"><div class="v" id="ppt-stat-time">00:00</div><div class="l">Time Taken</div></div>
+        </div>
+        <div class="ppt-results-actions">
+          <button class="btn btn-primary" id="ppt-btn-retake" type="button">🔄 Retake Quiz</button>
+          <button class="btn btn-ghost" id="ppt-btn-back-results" type="button">Back to Quiz Menu</button>
+        </div>
+        <div class="ppt-review-panel">
+          <div class="review-head"><h3>Review Answers</h3></div>
+          <div class="ppt-review-list" id="ppt-review-list"></div>
+        </div>
+      </div>
+    </section>
+
   </main>
 </div>
+
+<script>
+/* ===================== PPT-BASED QUIZ ===================== */
+const PPT_QUIZ_TIME_LIMIT = 60 * 60;
+const PPT_WARN_THRESHOLD = 5 * 60;
+const PPT_LETTERS = ['A','B','C','D'];
+const PPT_QUIZ_QUESTIONS = [{"id": 1, "question": "What is the primary purpose of immersive technologies?", "options": ["To replace all computer hardware", "To create interactive environments that stimulate one or more human senses", "To increase internet bandwidth", "To eliminate the need for software"], "correct": 1, "explanation": "Immersive technologies create interactive environments that stimulate one or more human senses."}, {"id": 2, "question": "Which of the following is NOT a core building block of immersive technologies?", "options": ["Motion tracking", "Sensor fusion", "Real-time rendering", "Spreadsheet processing"], "correct": 3, "explanation": "Spreadsheet processing is not listed as a core building block."}, {"id": 3, "question": "What is the main objective of immersive technology?", "options": ["To make interactions natural and intuitive", "To reduce screen resolution", "To remove user interaction", "To make digital environments less realistic"], "correct": 0, "explanation": "The key objective is to make human-computer interactions natural and intuitive."}, {"id": 4, "question": "Which technology completely replaces the user's real-world environment?", "options": ["AR", "MR", "VR", "XR"], "correct": 2, "explanation": "VR replaces the real environment with a computer-generated world."}, {"id": 5, "question": "Which technology adds digital information to the real world?", "options": ["VR", "AR", "MR", "XR"], "correct": 1, "explanation": "AR enhances the real world by overlaying digital information."}, {"id": 6, "question": "Which is the correct Reality-Virtuality Continuum?", "options": ["VR → AR → MR → Real Environment", "Real Environment → AR → MR → Augmented Virtuality → VR", "AR → VR → MR → Real Environment", "MR → AR → VR → Real Environment"], "correct": 1, "explanation": "The continuum moves from the real environment toward increasingly virtual environments."}, {"id": 7, "question": "Moving toward VR causes:", "options": ["Less virtual content", "More real-world content", "More computer-generated content", "No digital content"], "correct": 2, "explanation": "Toward VR, computer-generated content increases while real-world content decreases."}, {"id": 8, "question": "Which is a characteristic of VR?", "options": ["Complete immersion", "Printed markers", "Real-world-only visualization", "No tracking"], "correct": 0, "explanation": "Complete immersion is one of the listed characteristics of VR."}, {"id": 9, "question": "Which is an application of VR?", "options": ["Flight simulation", "Spreadsheet editing", "Email filtering", "Password management"], "correct": 0, "explanation": "Flight simulation is specifically listed as a VR application."}, {"id": 10, "question": "Which statement best describes Mixed Reality?", "options": ["It completely replaces reality", "It only displays text", "Virtual objects interact with real objects", "It requires printed markers"], "correct": 2, "explanation": "MR allows virtual objects to interact with real-world objects."}, {"id": 11, "question": "Extended Reality (XR) is:", "options": ["A type of VR headset", "An umbrella term for VR, AR and MR", "A GPS system", "A marker-detection technique"], "correct": 1, "explanation": "XR includes VR, AR, and MR."}, {"id": 12, "question": "Which characteristic helps an immersive system understand the user's surroundings?", "options": ["Spatial awareness", "File compression", "Text formatting", "Spreadsheet processing"], "correct": 0, "explanation": "Spatial awareness is one of the major characteristics of immersive systems."}, {"id": 13, "question": "Which component detects head, eye and hand movements?", "options": ["Display", "Tracking", "Content database", "Rendering engine"], "correct": 1, "explanation": "Tracking detects head, eye, and hand movements."}, {"id": 14, "question": "Which component generates realistic graphics?", "options": ["Rendering engine", "Input device", "Content database", "Tracking system"], "correct": 0, "explanation": "The rendering engine generates realistic graphics."}, {"id": 15, "question": "What does the content database store?", "options": ["Head movements", "Models, textures, animations and scenes", "Only sound", "Battery information"], "correct": 1, "explanation": "These digital assets are stored in the content database."}, {"id": 16, "question": "Which is an input device?", "options": ["Controller", "Rendering engine", "Content database", "Texture library"], "correct": 0, "explanation": "Controllers, gloves, cameras and microphones are input devices."}, {"id": 17, "question": "Desktop-based 3D applications are:", "options": ["Fully immersive", "Semi-immersive", "Non-immersive", "Hyper-immersive"], "correct": 2, "explanation": "Desktop-based 3D applications are classified as non-immersive."}, {"id": 18, "question": "Large projection screens and simulators are:", "options": ["Non-immersive", "Semi-immersive", "Fully immersive", "Markerless AR"], "correct": 1, "explanation": "Large projection screens and simulators are examples of semi-immersive systems."}, {"id": 19, "question": "Which represents fully immersive technology?", "options": ["Desktop 3D", "Projection screen", "HMD with complete tracking", "Printed textbook"], "correct": 2, "explanation": "HMDs with complete tracking represent fully immersive systems."}, {"id": 20, "question": "Higher immersion generally produces:", "options": ["Lower presence", "Stronger presence", "Less interaction", "Less realism"], "correct": 1, "explanation": "Higher immersion generally creates a stronger sense of presence."}, {"id": 21, "question": "Who invented the stereoscope?", "options": ["Ivan Sutherland", "Morton Heilig", "Sir Charles Wheatstone", "Edwin Link"], "correct": 2, "explanation": "Sir Charles Wheatstone invented the stereoscope in 1838."}, {"id": 22, "question": "How did the stereoscope create a 3D view?", "options": ["GPS tracking", "Two different images to each eye", "Holograms", "AI"], "correct": 1, "explanation": "The brain combined two slightly different images into one 3D view."}, {"id": 23, "question": "Who developed the Link Trainer?", "options": ["Edwin Link", "Jaron Lanier", "Ivan Sutherland", "Morton Heilig"], "correct": 0, "explanation": "Edwin Link developed the Link Trainer in 1929."}, {"id": 24, "question": "What was an important benefit of the Link Trainer?", "options": ["Safe pilot training", "AR glasses", "Wireless VR", "AI environments"], "correct": 0, "explanation": "It enabled pilot training without real-world risks."}, {"id": 25, "question": "Who introduced Sensorama?", "options": ["Jaron Lanier", "Morton Heilig", "Edwin Link", "Ivan Sutherland"], "correct": 1, "explanation": "Morton Heilig introduced Sensorama in 1956."}, {"id": 26, "question": "Which was NOT a Sensorama feature?", "options": ["Stereo sound", "Wind effects", "Smell generation", "GPS navigation"], "correct": 3, "explanation": "GPS navigation was not among Sensorama's listed sensory effects."}, {"id": 27, "question": "What concept did Sensorama introduce?", "options": ["Multisensory immersion", "Cloud computing", "Markerless AR", "6G"], "correct": 0, "explanation": "Sensorama demonstrated multisensory immersion."}, {"id": 28, "question": "Was Sensorama interactive?", "options": ["Yes, fully interactive", "No", "Only through GPS", "Only through eye tracking"], "correct": 1, "explanation": "The material specifically states that Sensorama was not interactive."}, {"id": 29, "question": "Who developed the Sword of Damocles?", "options": ["Morton Heilig", "Jaron Lanier", "Ivan Sutherland", "Edwin Link"], "correct": 2, "explanation": "Ivan Sutherland developed the first HMD, the Sword of Damocles, in 1968."}, {"id": 30, "question": "Why was the Sword of Damocles suspended from the ceiling?", "options": ["GPS requirement", "Its heavy weight", "Cloud computing", "Lack of display"], "correct": 1, "explanation": "It was suspended because the system was too heavy."}, {"id": 31, "question": "What was important about the Sword of Damocles?", "options": ["It introduced smartphones", "It combined graphics with head tracking", "It introduced markerless AR", "It was wireless"], "correct": 1, "explanation": "It combined computer graphics with head tracking."}, {"id": 32, "question": "Which organization contributed to VR research in the 1970s–1980s?", "options": ["NASA Ames", "Meta", "Nintendo", "Google"], "correct": 0, "explanation": "NASA Ames conducted important VR research during this period."}, {"id": 33, "question": "Which technology was used during this period?", "options": ["Data gloves", "6G", "Digital twins", "Holographic displays"], "correct": 0, "explanation": "Data gloves were among the technologies developed and used."}, {"id": 34, "question": "Who founded VPL Research?", "options": ["Ivan Sutherland", "Jaron Lanier", "Morton Heilig", "Edwin Link"], "correct": 1, "explanation": "Jaron Lanier founded VPL Research in 1984."}, {"id": 35, "question": "Which term did Jaron Lanier popularize?", "options": ["Spatial Computing", "Virtual Reality", "Digital Twin", "Cloud XR"], "correct": 1, "explanation": "Lanier popularized the term “Virtual Reality.”"}, {"id": 36, "question": "Which product was associated with VPL Research?", "options": ["DataGlove", "Meta Quest", "PlayStation VR", "Google Lens"], "correct": 0, "explanation": "DataGlove was one of VPL Research's technologies."}, {"id": 37, "question": "Which was a 1990s commercial VR system?", "options": ["Virtuality Arcade Systems", "Meta Quest", "ARCore", "Google Lens"], "correct": 0, "explanation": "Virtuality Arcade Systems were among the commercial VR systems of the 1990s."}, {"id": 38, "question": "Which was a limitation of 1990s VR?", "options": ["High-resolution displays", "Low-resolution displays and high latency", "Excess processing power", "Unlimited software"], "correct": 1, "explanation": "Low resolution and high latency were major limitations."}, {"id": 39, "question": "What was the VR Winter?", "options": ["Rapid VR growth", "Decline in commercial VR", "Introduction of standalone VR", "First AR period"], "correct": 1, "explanation": "The VR Winter was a period of declining commercial VR investment."}, {"id": 40, "question": "Which contributed to the VR Winter?", "options": ["High equipment cost", "High consumer demand", "Powerful computers", "Excellent graphics"], "correct": 0, "explanation": "High equipment cost was one of the listed causes."}, {"id": 41, "question": "What event began modern consumer VR?", "options": ["Sensorama", "Oculus Rift prototype", "Stereoscope", "Link Trainer"], "correct": 1, "explanation": "The 2012 Oculus Rift prototype marked the beginning of modern consumer VR."}, {"id": 42, "question": "Which feature helped the Oculus Revolution?", "options": ["High-definition displays", "Printed markers", "Mechanical-only tracking", "Poor graphics"], "correct": 0, "explanation": "High-definition displays were one of the improvements of the Oculus Revolution."}, {"id": 43, "question": "When did Facebook acquire Oculus?", "options": ["2008", "2010", "2014", "2020"], "correct": 2, "explanation": "Facebook acquired Oculus in 2014."}, {"id": 44, "question": "Which is a feature of modern VR?", "options": ["6DoF tracking", "Only mechanical tracking", "No interaction", "No audio"], "correct": 0, "explanation": "Modern VR systems include Six Degrees of Freedom tracking."}, {"id": 45, "question": "Which hardware generation belongs to the 2020s?", "options": ["Mechanical HMDs", "Data gloves", "Commercial VR headsets", "Standalone wireless VR/XR devices"], "correct": 3, "explanation": "The 2020s are associated with standalone wireless VR and XR devices."}, {"id": 46, "question": "Which describes early VR software?", "options": ["Photorealistic rendering", "Physics simulation", "Wireframe graphics", "Advanced AI"], "correct": 2, "explanation": "Early VR used wireframe graphics, simple rendering, and limited interaction."}, {"id": 47, "question": "Which pair represents modern VR software?", "options": ["Wireframe + simple rendering", "Photorealistic rendering + physics simulation", "Mechanical tracking + markers", "Stereo sound + wind"], "correct": 1, "explanation": "Modern VR software includes photorealistic rendering and physics simulation."}, {"id": 48, "question": "Which industry uses digital twins and product design?", "options": ["Manufacturing", "Tourism", "Retail", "Entertainment"], "correct": 0, "explanation": "Manufacturing applications include digital twins and product design."}, {"id": 49, "question": "Which future VR technology supports adaptive environments?", "options": ["Artificial Intelligence", "Printed markers", "Data gloves", "Stereo sound"], "correct": 0, "explanation": "AI is proposed for creating adaptive environments."}, {"id": 50, "question": "Which future technology provides remote rendering?", "options": ["BCI", "Cloud XR", "DataGlove", "Sensorama"], "correct": 1, "explanation": "Cloud XR is identified for remote rendering."}, {"id": 51, "question": "What are Azuma's three essential AR characteristics?", "options": ["Capture, render, display", "Combine, interact, register", "Track, simulate, replace", "Detect, calculate, transmit"], "correct": 1, "explanation": "AR combines real and virtual objects, interacts in real time, and accurately registers virtual objects."}, {"id": 52, "question": "What does registration mean in AR?", "options": ["Storing applications", "Accurate alignment of virtual objects with reality", "Increasing battery life", "Replacing reality"], "correct": 1, "explanation": "Registration means accurately aligning virtual objects with the real environment."}, {"id": 53, "question": "What is the first step in the AR working process?", "options": ["Render objects", "Detect surfaces", "Capture the real-world scene", "Display the combined scene"], "correct": 2, "explanation": "The process begins by capturing the real-world scene using a camera."}, {"id": 54, "question": "What happens after feature/marker/surface detection?", "options": ["Camera position and orientation are estimated", "The scene is deleted", "The object is purchased", "The display is turned off"], "correct": 0, "explanation": "The next step is estimating the camera's position and orientation."}, {"id": 55, "question": "Which is an AR input device?", "options": ["Gyroscope", "Texture database", "Virtual object", "Rendering engine"], "correct": 0, "explanation": "Gyroscopes are listed as AR input devices."}, {"id": 56, "question": "Which is AR software?", "options": ["ARCore", "Link Trainer", "Sensorama", "EyePhone"], "correct": 0, "explanation": "ARCore is listed as an AR SDK."}, {"id": 57, "question": "Which is an AR limitation?", "options": ["Better visualization", "Real-time guidance", "Lighting sensitivity", "Increased productivity"], "correct": 2, "explanation": "Lighting sensitivity is specifically listed as an AR limitation."}, {"id": 58, "question": "Which AR type requires predefined visual markers?", "options": ["Markerless AR", "Marker-Based AR", "MR", "VR"], "correct": 1, "explanation": "Marker-Based AR uses predefined visual markers to place virtual objects."}, {"id": 59, "question": "How does markerless AR differ from marker-based AR?", "options": ["It requires printed markers", "It uses sensors and computer vision", "It cannot use cameras", "It replaces reality"], "correct": 1, "explanation": "Markerless AR recognizes surfaces, objects, or locations using sensors and computer vision."}, {"id": 60, "question": "Which technology builds a map of surroundings in markerless AR?", "options": ["SLAM", "Sensorama", "DataGlove", "EyePhone"], "correct": 0, "explanation": "SLAM builds a map of the surrounding environment."}, {"id": 61, "question": "Which of the following is a major characteristic of immersive technologies?", "options": ["Natural interaction", "Manual typing only", "No sensory feedback", "Static environments only"], "correct": 0, "explanation": "Natural interaction is one of the major characteristics of immersive technologies."}, {"id": 62, "question": "Which type of feedback is specifically mentioned as an immersive technology characteristic?", "options": ["Multi-sensory feedback", "Financial feedback", "Text feedback only", "Network feedback"], "correct": 0, "explanation": "Multi-sensory feedback is listed as a major characteristic."}, {"id": 63, "question": "Which sense is primarily stimulated by visual displays?", "options": ["Vision", "Balance", "Taste", "Smell"], "correct": 0, "explanation": "Vision is one of the primary human senses stimulated by immersive systems."}, {"id": 64, "question": "Which technology provides tactile feedback?", "options": ["Haptic feedback", "GPS", "Cloud XR", "Spatial audio"], "correct": 0, "explanation": "Touch is stimulated through haptic feedback."}, {"id": 65, "question": "Which industry uses virtual laboratories?", "options": ["Education", "Retail", "Tourism", "Manufacturing"], "correct": 0, "explanation": "Education applications include virtual laboratories and interactive classrooms."}, {"id": 66, "question": "Which is an advantage of immersive technologies?", "options": ["Safe simulation", "Higher equipment cost", "Privacy concerns", "Motion sickness"], "correct": 0, "explanation": "Safe simulation is listed as an advantage of immersive technologies."}, {"id": 67, "question": "Which is a current challenge of immersive technologies?", "options": ["Improved learning", "Faster product design", "Motion sickness", "Better collaboration"], "correct": 2, "explanation": "Motion sickness is listed among the current challenges."}, {"id": 68, "question": "Which of the following is NOT listed as a current limitation?", "options": ["Battery limitations", "Privacy issues", "Cybersecurity threats", "Improved learning"], "correct": 3, "explanation": "Improved learning is an advantage, not a listed limitation."}, {"id": 69, "question": "Which future technology is associated with direct brain-computer interaction?", "options": ["Brain–Computer Interfaces", "DataGlove", "ARCore", "Sensorama"], "correct": 0, "explanation": "Brain–Computer Interfaces are listed as a future immersive technology."}, {"id": 70, "question": "Which is listed as a future immersive technology trend?", "options": ["Edge Computing", "Mechanical HMDs", "Wireframe graphics", "Printed markers"], "correct": 0, "explanation": "Edge Computing is included among the future trends."}, {"id": 71, "question": "Which is an example of location-based markerless AR?", "options": ["Navigation", "Surgical simulation", "Virtual concerts", "Digital twins"], "correct": 0, "explanation": "Location-based AR uses GPS, compass, and accelerometer and can support navigation and tourism."}, {"id": 72, "question": "Which type of markerless AR is associated with furniture placement?", "options": ["Plane-based AR", "Location-based AR", "Object recognition only", "Marker-based AR"], "correct": 0, "explanation": "Plane-based AR detects surfaces and is used for furniture and interior design."}, {"id": 73, "question": "Object recognition AR mainly uses:", "options": ["Computer vision", "Printed QR codes only", "Stereo sound", "Wind effects"], "correct": 0, "explanation": "Object recognition uses computer vision to overlay information on real objects."}, {"id": 74, "question": "Which has higher flexibility according to the AR comparison?", "options": ["Marker-based AR", "Markerless AR", "Both have limited flexibility", "Neither"], "correct": 1, "explanation": "Markerless AR is listed as having high flexibility, while marker-based AR has limited flexibility."}, {"id": 75, "question": "Which generally has lower cost?", "options": ["Marker-based AR", "Markerless AR", "Both always cost the same", "Neither"], "correct": 0, "explanation": "The comparison table identifies marker-based AR as lower cost and markerless AR as higher cost."}, {"id": 76, "question": "Which AR method typically provides high accuracy when the marker is visible?", "options": ["Marker-based AR", "Markerless AR", "VR", "MR"], "correct": 0, "explanation": "Marker-based AR has high accuracy when the visual marker is visible."}, {"id": 77, "question": "Which is an AR application in healthcare?", "options": ["Surgical guidance", "Virtual shopping", "Building visualization", "Mobile gaming"], "correct": 0, "explanation": "Healthcare applications include surgical guidance, medical training, and vein visualization."}, {"id": 78, "question": "Which is an AR application in retail?", "options": ["Virtual fitting rooms", "Combat simulation", "Surgical training", "Historical reconstruction"], "correct": 0, "explanation": "Retail uses virtual fitting rooms, product visualization, and cosmetics try-on."}, {"id": 79, "question": "Which is a future trend specifically mentioned for AR?", "options": ["AI-powered AR assistants", "Mechanical HMDs", "Sensorama", "DataGlove"], "correct": 0, "explanation": "AI-powered AR assistants are listed as a future AR trend."}, {"id": 80, "question": "Which statement correctly compares AR and VR?", "options": ["AR replaces reality while VR enhances it", "AR enhances reality while VR replaces it with a virtual environment", "Both completely replace reality", "Both require printed markers"], "correct": 1, "explanation": "AR keeps the real world and adds digital content, whereas VR replaces the real environment with a computer-generated world."}];
+
+(function(){
+  "use strict";
+  let currentIndex=0, correctCount=0, wrongCount=0, selectedIndex=null, answers=[], locked=false;
+  let timeRemaining=PPT_QUIZ_TIME_LIMIT, timerInterval=null, quizStartTs=null, quizEndTs=null;
+
+  const startScreen=document.getElementById('ppt-screen-start');
+  const quizScreen=document.getElementById('ppt-screen-quiz');
+  const resultsScreen=document.getElementById('ppt-screen-results');
+  const openBtn=document.getElementById('btn-ppt-open');
+  const startBtn=document.getElementById('ppt-btn-start');
+  const backStartBtn=document.getElementById('ppt-btn-back-start');
+  const checkBtn=document.getElementById('ppt-btn-check');
+  const nextBtn=document.getElementById('ppt-btn-next');
+  const retakeBtn=document.getElementById('ppt-btn-retake');
+  const backResultsBtn=document.getElementById('ppt-btn-back-results');
+  const qCurrent=document.getElementById('ppt-q-current');
+  const scoreCorrect=document.getElementById('ppt-score-correct');
+  const scoreWrong=document.getElementById('ppt-score-wrong');
+  const timerBadge=document.getElementById('ppt-timer-badge');
+  const progressFill=document.getElementById('ppt-progress-fill');
+  const progressLabel=document.getElementById('ppt-progress-label');
+  const navStrip=document.getElementById('ppt-nav-strip');
+  const qMeta=document.getElementById('ppt-q-meta');
+  const qText=document.getElementById('ppt-q-text');
+  const optionsGrid=document.getElementById('ppt-options-grid');
+  const actionRow=document.getElementById('ppt-action-row');
+  const feedbackRow=document.getElementById('ppt-feedback-row');
+  const fbStatus=document.getElementById('ppt-fb-status');
+  const fbCorrectLine=document.getElementById('ppt-fb-correct-line');
+  const fbWhy=document.getElementById('ppt-fb-why');
+  const ringProgress=document.getElementById('ppt-ring-progress');
+  const ringPct=document.getElementById('ppt-ring-pct');
+  const resScore=document.getElementById('ppt-res-score');
+  const perfMsg=document.getElementById('ppt-perf-msg');
+  const statCorrect=document.getElementById('ppt-stat-correct');
+  const statWrong=document.getElementById('ppt-stat-wrong');
+  const statAccuracy=document.getElementById('ppt-stat-accuracy');
+  const statTime=document.getElementById('ppt-stat-time');
+  const reviewList=document.getElementById('ppt-review-list');
+
+  function formatTime(totalSeconds){
+    const s=Math.max(0,Math.floor(totalSeconds));
+    return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  }
+  function showOnly(screen){
+    [document.getElementById('screen-start'),document.getElementById('screen-quiz'),document.getElementById('screen-results'),startScreen,quizScreen,resultsScreen].forEach(s=>s.classList.remove('active'));
+    screen.classList.add('active');
+  }
+  function resetState(){
+    currentIndex=0; correctCount=0; wrongCount=0; selectedIndex=null; locked=false;
+    answers=new Array(PPT_QUIZ_QUESTIONS.length).fill(null);
+    timeRemaining=PPT_QUIZ_TIME_LIMIT;
+    if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+    scoreCorrect.textContent='0'; scoreWrong.textContent='0';
+    timerBadge.textContent=formatTime(timeRemaining); timerBadge.classList.remove('warn');
+  }
+  function buildNav(){
+    navStrip.innerHTML='';
+    const frag=document.createDocumentFragment();
+    PPT_QUIZ_QUESTIONS.forEach((q,i)=>{
+      const el=document.createElement('div'); el.className='ppt-nav-num'; el.id='ppt-nav-'+i; el.textContent=String(i+1).padStart(2,'0');
+      el.setAttribute('role','img'); el.setAttribute('aria-label','Question '+(i+1)+(answers[i]?' answered':' not answered'));
+      frag.appendChild(el);
+    });
+    navStrip.appendChild(frag); updateNav();
+  }
+  function updateNav(){
+    PPT_QUIZ_QUESTIONS.forEach((q,i)=>{
+      const el=document.getElementById('ppt-nav-'+i); if(!el)return;
+      el.classList.toggle('current',i===currentIndex); el.classList.toggle('answered',!!answers[i]);
+      el.setAttribute('aria-label','Question '+(i+1)+(answers[i]?(answers[i].correct?' answered correctly':' answered incorrectly'):' not answered'));
+    });
+    const cur=document.getElementById('ppt-nav-'+currentIndex);
+    if(cur&&cur.scrollIntoView)cur.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
+  }
+  function updateProgress(){
+    const pct=Math.round(((currentIndex+1)/PPT_QUIZ_QUESTIONS.length)*100);
+    progressFill.style.width=pct+'%'; progressLabel.textContent=pct+'%';
+  }
+  function renderQuestion(){
+    const q=PPT_QUIZ_QUESTIONS[currentIndex];
+    const record=answers[currentIndex];
+    selectedIndex=record?record.selected:null; locked=!!record;
+    qCurrent.textContent=currentIndex+1; qMeta.textContent=currentIndex<12?'IMMERSIVE TECHNOLOGIES':currentIndex<20?'SYSTEM COMPONENTS':currentIndex<50?'EVOLUTION OF VR': 'AUGMENTED REALITY';
+    qText.textContent=q.question; optionsGrid.innerHTML='';
+    q.options.forEach((text,idx)=>{
+      const card=document.createElement('button'); card.type='button'; card.className='ppt-opt-card'; card.dataset.idx=idx;
+      card.setAttribute('aria-label',PPT_LETTERS[idx]+': '+text); card.setAttribute('aria-pressed',String(selectedIndex===idx));
+      const letter=document.createElement('div'); letter.className='ppt-opt-letter'; letter.textContent=PPT_LETTERS[idx];
+      const label=document.createElement('div'); label.className='ppt-opt-label'; label.textContent=text;
+      card.append(letter,label);
+      if(!locked) card.addEventListener('click',()=>selectOption(idx));
+      optionsGrid.appendChild(card);
+    });
+    feedbackRow.classList.remove('show');
+    actionRow.style.display=locked?'none':'flex';
+    checkBtn.disabled=selectedIndex===null;
+    if(locked) applyAnsweredState();
+    updateProgress(); updateNav();
+  }
+  function selectOption(idx){
+    if(locked)return;
+    selectedIndex=idx;
+    optionsGrid.querySelectorAll('.ppt-opt-card').forEach((card,i)=>{
+      card.classList.toggle('selected',i===idx); card.setAttribute('aria-pressed',String(i===idx));
+    });
+    checkBtn.disabled=false;
+  }
+  function checkAnswer(){
+    if(locked||selectedIndex===null)return;
+    const q=PPT_QUIZ_QUESTIONS[currentIndex];
+    const isCorrect=selectedIndex===q.correct;
+    answers[currentIndex]={selected:selectedIndex,correct:isCorrect}; locked=true;
+    if(isCorrect)correctCount++;else wrongCount++;
+    scoreCorrect.textContent=correctCount; scoreWrong.textContent=wrongCount;
+    applyAnsweredState(); updateNav();
+  }
+  function applyAnsweredState(){
+    const q=PPT_QUIZ_QUESTIONS[currentIndex], record=answers[currentIndex];
+    optionsGrid.querySelectorAll('.ppt-opt-card').forEach((card,i)=>{
+      card.classList.add('locked'); card.disabled=true;
+      if(i===q.correct)card.classList.add('correct');
+      else if(record&&i===record.selected&&!record.correct)card.classList.add('wrong');
+      else card.classList.add('muted');
+    });
+    fbStatus.textContent=record.correct?'✓ Correct!':'✕ Incorrect';
+    fbStatus.className='ppt-fb-status '+(record.correct?'ok':'no');
+    fbCorrectLine.innerHTML='Correct answer: <b>'+PPT_LETTERS[q.correct]+'. '+escapeHtml(q.options[q.correct])+'</b>';
+    fbWhy.textContent='Why? '+q.explanation;
+    feedbackRow.classList.add('show'); actionRow.style.display='none';
+    nextBtn.textContent=currentIndex===PPT_QUIZ_QUESTIONS.length-1?'View Results →':'Next Question →';
+  }
+  function escapeHtml(str){const d=document.createElement('div');d.textContent=str;return d.innerHTML;}
+  function startTimer(){
+    quizStartTs=Date.now(); timerBadge.textContent=formatTime(timeRemaining);
+    timerInterval=setInterval(()=>{
+      timeRemaining--; timerBadge.textContent=formatTime(timeRemaining);
+      timerBadge.classList.toggle('warn',timeRemaining<=PPT_WARN_THRESHOLD);
+      if(timeRemaining<=0){clearInterval(timerInterval);timerInterval=null;finishQuiz(true);}
+    },1000);
+  }
+  function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;}}
+  function startQuiz(){resetState();buildNav();showOnly(quizScreen);renderQuestion();startTimer();}
+  function finishQuiz(autoSubmitted){
+    stopTimer(); quizEndTs=Date.now(); progressFill.style.width='100%'; progressLabel.textContent='100%'; renderResults(autoSubmitted); showOnly(resultsScreen);
+  }
+  function renderResults(autoSubmitted){
+    const total=PPT_QUIZ_QUESTIONS.length, pct=Math.round((correctCount/total)*100);
+    resScore.textContent=correctCount; ringPct.textContent=pct+'%'; statCorrect.textContent=correctCount; statWrong.textContent=wrongCount; statAccuracy.textContent=pct+'%';
+    const elapsed=quizStartTs?Math.round((quizEndTs-quizStartTs)/1000):(PPT_QUIZ_TIME_LIMIT-timeRemaining); statTime.textContent=formatTime(elapsed);
+    ringProgress.style.strokeDashoffset=352-(352*pct/100);
+    let msg;
+    if(pct>=90)msg='Excellent! 🏆 You have a very strong understanding of the PPT material.';
+    else if(pct>=75)msg='Very Good! 🎯 You understand most of the important concepts. Review a few weak areas.';
+    else if(pct>=60)msg='Good! 👍 You have a reasonable understanding, but some topics need revision.';
+    else if(pct>=40)msg='Needs Improvement 📚 Review the PPT material carefully and attempt the quiz again.';
+    else msg='More Revision Needed 💪 Go through the study material again before retaking the quiz.';
+    perfMsg.textContent=msg+(autoSubmitted?' (Time expired — auto-submitted)':''); renderReview();
+  }
+  function renderReview(){
+    reviewList.innerHTML=''; const frag=document.createDocumentFragment();
+    PPT_QUIZ_QUESTIONS.forEach((q,i)=>{
+      const record=answers[i], isCorrect=!!(record&&record.correct), isAnswered=!!record;
+      const details=document.createElement('details'); details.className='ppt-review-item '+(isCorrect?'correct':'wrong');
+      const summary=document.createElement('summary');
+      summary.innerHTML='<span class="rq-num">Q'+String(i+1).padStart(2,'0')+'</span><span class="rq-text">'+escapeHtml(q.question)+'</span><span class="rq-status">'+(isAnswered?(isCorrect?'✓ CORRECT':'✕ WRONG'):'— SKIPPED')+'</span>';
+      const body=document.createElement('div'); body.className='ppt-review-body';
+      const your=isAnswered?PPT_LETTERS[record.selected]+'. '+q.options[record.selected]:'Not answered';
+      const correct=PPT_LETTERS[q.correct]+'. '+q.options[q.correct];
+      body.innerHTML='<div>Your answer: <b class="'+(isCorrect?'ok':'no')+'">'+escapeHtml(your)+'</b></div><div>Correct answer: <b class="ok">'+escapeHtml(correct)+'</b></div><div>Why? '+escapeHtml(q.explanation)+'</div>';
+      details.append(summary,body); frag.appendChild(details);
+    });
+    reviewList.appendChild(frag);
+  }
+
+  openBtn.addEventListener('click',()=>showOnly(startScreen));
+  backStartBtn.addEventListener('click',()=>showOnly(document.getElementById('screen-start')));
+  backResultsBtn.addEventListener('click',()=>showOnly(document.getElementById('screen-start')));
+  startBtn.addEventListener('click',startQuiz); retakeBtn.addEventListener('click',startQuiz);
+  checkBtn.addEventListener('click',checkAnswer);
+  nextBtn.addEventListener('click',()=>{if(!answers[currentIndex])return;if(currentIndex===PPT_QUIZ_QUESTIONS.length-1)finishQuiz(false);else{currentIndex++;renderQuestion();}});
+  document.addEventListener('keydown',(e)=>{
+    if(!quizScreen.classList.contains('active'))return;
+    if(['1','2','3','4'].includes(e.key)&&!locked)selectOption(Number(e.key)-1);
+    else if(e.key==='Enter'){if(!locked&&selectedIndex!==null)checkBtn.click();else if(locked)nextBtn.click();}
+  });
+})();
+</script>
 
 <script>
 /* ===================== QUESTION BANK (embedded, authoritative source) ===================== */
