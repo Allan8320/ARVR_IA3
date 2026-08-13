@@ -450,6 +450,9 @@
   .opt-card.locked{ cursor:default; }
   .opt-card.muted{ opacity:0.4; }
 
+  .quiz-action-row{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:14px;}
+  .quiz-action-row .btn{min-width:120px;}
+
   .feedback-row{
     flex:0 0 auto;
     display:none;
@@ -885,13 +888,21 @@
           <div class="q-meta" id="q-meta">CO1 · RECALL</div>
           <div class="q-text" id="q-text">Loading question...</div>
           <div class="options-grid" id="options-grid"></div>
+          <div class="quiz-action-row" id="quiz-action-row">
+            <button class="btn btn-ghost" id="btn-prev" type="button">← Previous</button>
+            <button class="btn btn-ghost" id="btn-end" type="button">End Quiz</button>
+          </div>
           <div class="feedback-row" id="feedback-row">
             <div class="fb-text">
               <div class="fb-status" id="fb-status">✓ Correct</div>
               <div id="fb-correct-line"></div>
               <div class="fb-why" id="fb-why"></div>
             </div>
-            <button class="btn btn-next" id="btn-next">Next Question →</button>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;width:100%;">
+              <button class="btn btn-ghost" id="btn-prev-feedback" type="button">← Previous</button>
+              <button class="btn btn-ghost" id="btn-end-feedback" type="button">End Quiz</button>
+              <button class="btn btn-next" id="btn-next">Next Question →</button>
+            </div>
           </div>
         </div>
 
@@ -1494,6 +1505,9 @@ const QUESTION_BANK = [{"id": 1, "question": "Identify the correct definition of
     if (answers[currentIndex]){
       applyAnsweredState();
     }
+    const canGoPrev = currentIndex > 0;
+    btnPrev.disabled = !canGoPrev;
+    btnPrevFeedback.disabled = !canGoPrev;
 
     updateNavStrip();
     updateScoreDisplay();
@@ -1556,6 +1570,8 @@ const QUESTION_BANK = [{"id": 1, "question": "Identify the correct definition of
   /* ---------- NAVIGATION ---------- */
   btnPrev.addEventListener('click', () => { if(currentIndex>0) goToQuestion(currentIndex-1); });
   btnEnd.addEventListener('click', endQuizEarly);
+  btnPrevFeedback.addEventListener('click', () => { if(currentIndex>0) goToQuestion(currentIndex-1); });
+  btnEndFeedback.addEventListener('click', endQuizEarly);
   btnNext.addEventListener('click', () => {
     if (!answers[currentIndex]) return;
     if (currentIndex === sessionQuestions.length - 1) finishQuiz(false);
