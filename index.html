@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Revision Console — AR/VR Question Bank</title>
+<style>
+  :root{
+    --bg-0:#070b14;
+    --bg-1:#0b111f;
+    --bg-2:#101a2e;
+    --panel:#0e1526;
+    --panel-2:#121c33;
+    --border:#1f2c47;
+    --border-soft:#182238;
+    --text-hi:#e8edf7;
+    --text-mid:#a6b3ce;
+    --text-low:#5f6d8c;
+    --cyan:#37d3e0;
+    --blue:#4f8cff;
+    --blue-dim:#2c4d8f;
+    --green:#39d98a;
+    --red:#ff5c72;
+    --yellow:#f5c84c;
+    --mono: 'SF Mono', 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    background:var(--bg-0);
+  }
+  body{
+    min-height:100dvh;
+    font-family:var(--sans);
+    color:var(--text-hi);
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(79,140,255,0.08), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(55,211,224,0.06), transparent 55%),
+      var(--bg-0);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{ background:rgba(55,211,224,0.25); color:#fff; }
+
+  button{ font-family:inherit; }
+
+  ::-webkit-scrollbar{ width:8px; height:8px; }
+  ::-webkit-scrollbar-track{ background:transparent; }
+  ::-webkit-scrollbar-thumb{ background:var(--border); border-radius:8px; }
+  ::-webkit-scrollbar-thumb:hover{ background:var(--blue-dim); }
+
+  .app{
+    height:100dvh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+
+  /* ============ HEADER ============ */
+  header.top{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 22px;
+    border-bottom:1px solid var(--border-soft);
+    background:linear-gradient(180deg, rgba(16,26,46,0.9), rgba(11,17,31,0.7));
+    backdrop-filter: blur(8px);
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .brand-badge{
+    width:34px; height:34px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:linear-gradient(145deg, rgba(55,211,224,0.14), rgba(79,140,255,0.08));
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:700;
+    color:var(--cyan);
+    letter-spacing:0.02em;
+  }
+  .brand-text .title{
+    font-size:14.5px;
+    font-weight:650;
+    color:var(--text-hi);
+    letter-spacing:0.01em;
+    line-height:1.2;
+  }
+  .brand-text .subtitle{
+    font-family:var(--mono);
+    font-size:9.5px;
+    letter-spacing:0.14em;
+    color:var(--text-low);
+    text-transform:uppercase;
+    margin-top:2px;
+  }
+  .top-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .chip{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:0.03em;
+    padding:5px 10px;
+    border-radius:20px;
+    border:1px solid var(--border);
+    color:var(--text-mid);
+    background:rgba(255,255,255,0.02);
+    display:flex; align-items:center; gap:6px;
+  }
+  .chip .dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 6px var(--green);
+  }
+
+  /* ============ MAIN ============ */
+  main{
+    flex:1 1 auto;
+    min-height:0;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    padding:18px 22px 20px;
+  }
+
+  .screen{
+    height:100%;
+    min-height:0;
+    display:none;
+    flex-direction:column;
+  }
+  .screen.active{ display:flex; }
+
+  /* ============ START SCREEN ============ */
+  #screen-start{
+    align-items:center;
+    justify-content:center;
+  }
+  .start-card{
+    width:100%;
+    max-width:620px;
+    border:1px solid var(--border);
+    background:linear-gradient(160deg, rgba(18,28,51,0.7), rgba(10,15,27,0.6));
+    border-radius:var(--radius);
+    padding:36px 34px 30px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);
+  }
+  .start-card::before{
+    content:"";
+    position:absolute; top:0; left:0; right:0; height:2px;
+    background:linear-gradient(90deg, transparent, var(--cyan), var(--blue), transparent);
+    opacity:0.7;
+  }
+  .start-eyebrow{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    margin-bottom:10px;
+  }
+  .start-card h1{
+    font-size:30px;
+    margin:0 0 12px;
+    letter-spacing:-0.01em;
+    line-height:1.15;
+    background:linear-gradient(180deg, #fff, #b9c6e3);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .start-card p.desc{
+    color:var(--text-mid);
+    font-size:14px;
+    line-height:1.55;
+    margin:0 0 22px;
+    max-width:480px;
+  }
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-bottom:24px;
+  }
+  .stat-pill{
+    border:1px solid var(--border-soft);
+    background:rgba(255,255,255,0.02);
+    border-radius:var(--radius-sm);
+    padding:10px 8px;
+    text-align:center;
+  }
+  .stat-pill .num{
+    font-family:var(--mono);
+    font-size:16px;
+    font-weight:700;
+    color:var(--text-hi);
+  }
+  .stat-pill .lab{
+    font-size:9.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--text-low);
+    margin-top:3px;
+  }
+  .btn{
+    appearance:none;
+    border:none;
+    cursor:pointer;
+    border-radius:8px;
+    font-weight:600;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn:active{ transform:translateY(1px); }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--cyan), var(--blue));
+    color:#04101f;
+    font-size:14.5px;
+    padding:13px 26px;
+    box-shadow:0 8px 24px -8px rgba(55,180,224,0.5);
+    width:100%;
+  }
+  .btn-primary:hover{ box-shadow:0 10px 30px -6px rgba(55,180,224,0.65); }
+  .btn-primary:focus-visible, .btn-ghost:focus-visible, .opt-card:focus-visible, .nav-num:focus-visible{
+    outline:2px solid var(--cyan);
+    outline-offset:2px;
+  }
+
+  .mini-cards{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-top:20px;
+  }
+  .mini-card{
+    border:1px solid var(--border-soft);
+    border-radius:var(--radius-sm);
+    padding:10px 12px;
+    background:rgba(255,255,255,0.015);
+  }
+  .mini-card .mc-num{
+    font-family:var(--mono);
+    color:var(--cyan);
+    font-size:13px;
+    font-weight:700;
+  }
+  .mini-card .mc-lab{
+    font-size:10.5px;
+    color:var(--text-low);
+    margin-top:2px;
+  }
+
+  /* ============ QUIZ SCREEN ============ */
+  #screen-quiz{
+    min-height:0;
+  }
+  .quiz-shell{
+    height:100%;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .status-bar{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .status-left{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--text-mid);
+  }
+  .status-left b{ color:var(--text-hi); }
+  .status-mid{
+    display:flex;
+    gap:8px;
+  }
+  .badge{
+    font-family:var(--mono);
+    font-size:11.5px;
+    padding:5px 10px;
+    border-radius:6px;
+    border:1px solid var(--border-soft);
+    display:flex; align-items:center; gap:5px;
+  }
+  .badge.correct{ color:var(--green); border-color:rgba(57,217,138,0.3); background:rgba(57,217,138,0.06); }
+  .badge.wrong{ color:var(--red); border-color:rgba(255,92,114,0.3); background:rgba(255,92,114,0.06); }
+  .badge.timer{ color:var(--text-hi); border-color:var(--border); background:rgba(255,255,255,0.02); min-width:76px; justify-content:center; }
+  .badge.timer.warn{ color:var(--yellow); border-color:rgba(245,200,76,0.4); background:rgba(245,200,76,0.08); animation:pulse-warn 1.4s ease-in-out infinite; }
+  @keyframes pulse-warn{ 0%,100%{opacity:1;} 50%{opacity:0.55;} }
+
+  .progress-track{
+    flex:0 0 auto;
+    height:6px;
+    border-radius:6px;
+    background:var(--panel-2);
+    border:1px solid var(--border-soft);
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--blue), var(--cyan));
+    transition:width .3s ease;
+  }
+
+  .nav-strip{
+    flex:0 0 auto;
+    display:flex;
+    gap:5px;
+    overflow-x:auto;
+    padding:2px 2px 6px;
+    scrollbar-width:thin;
+  }
+  .nav-num{
+    flex:0 0 auto;
+    width:26px; height:26px;
+    border-radius:5px;
+    border:1px solid var(--border-soft);
+    background:rgba(255,255,255,0.02);
+    color:var(--text-low);
+    font-family:var(--mono);
+    font-size:9.5px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:default;
+  }
+  .nav-num.current{
+    border-color:var(--cyan);
+    color:var(--cyan);
+    background:rgba(55,211,224,0.1);
+    box-shadow:0 0 0 2px rgba(55,211,224,0.12);
+  }
+  .nav-num.answered{
+    border-color:rgba(57,217,138,0.35);
+    color:var(--green);
+    background:rgba(57,217,138,0.07);
+  }
+
+  .question-area{
+    flex:1 1 auto;
+    min-height:0;
+    display:flex;
+    flex-direction:column;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    background:linear-gradient(165deg, rgba(16,25,45,0.55), rgba(9,13,24,0.55));
+    padding:20px 22px;
+    overflow:hidden;
+  }
+
+  .q-meta{
+    flex:0 0 auto;
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--text-low);
+    margin-bottom:8px;
+  }
+
+  .q-text{
+    flex:0 1 auto;
+    font-size:clamp(14px, 2.1vw, 19px);
+    line-height:1.42;
+    color:var(--text-hi);
+    font-weight:560;
+    margin:0 0 14px;
+    overflow:auto;
+    max-height:32%;
+    min-height:0;
+  }
+
+  .options-grid{
+    flex:1 1 auto;
+    min-height:0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr;
+    gap:10px;
+  }
+
+  .opt-card{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-align:left;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,0.015);
+    border-radius:var(--radius-sm);
+    padding:10px 14px;
+    color:var(--text-hi);
+    font-size:clamp(12px, 1.35vw, 14.5px);
+    line-height:1.32;
+    cursor:pointer;
+    transition:border-color .12s ease, background .12s ease, transform .1s ease;
+    overflow:auto;
+    min-height:0;
+  }
+  .opt-card:hover:not(.locked){
+    border-color:var(--blue);
+    background:rgba(79,140,255,0.08);
+  }
+  .opt-card:active:not(.locked){ transform:scale(0.995); }
+  .opt-letter{
+    flex:0 0 auto;
+    width:24px; height:24px;
+    border-radius:6px;
+    border:1px solid var(--border-soft);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:700;
+    color:var(--text-mid);
+  }
+  .opt-label{ flex:1 1 auto; min-width:0; }
+
+  .opt-card.correct{
+    border-color:var(--green);
+    background:rgba(57,217,138,0.1);
+  }
+  .opt-card.correct .opt-letter{ border-color:var(--green); color:var(--green); background:rgba(57,217,138,0.15); }
+  .opt-card.wrong{
+    border-color:var(--red);
+    background:rgba(255,92,114,0.1);
+  }
+  .opt-card.wrong .opt-letter{ border-color:var(--red); color:var(--red); background:rgba(255,92,114,0.15); }
+  .opt-card.locked{ cursor:default; }
+  .opt-card.muted{ opacity:0.4; }
+
+  .feedback-row{
+    flex:0 0 auto;
+    display:none;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid var(--border-soft);
+  }
+  .feedback-row.show{ display:flex; }
+  .fb-text{
+    flex:1 1 auto;
+    min-width:0;
+    font-size:12.5px;
+    line-height:1.5;
+    color:var(--text-mid);
+  }
+  .fb-status{
+    font-weight:700;
+    font-size:13.5px;
+    margin-bottom:3px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .fb-status.ok{ color:var(--green); }
+  .fb-status.no{ color:var(--red); }
+  .fb-text b{ color:var(--text-hi); }
+  .fb-why{ color:var(--text-low); font-size:11.5px; margin-top:2px; }
+
+  .btn-next{
+    flex:0 0 auto;
+    background:linear-gradient(135deg, var(--cyan), var(--blue));
+    color:#04101f;
+    font-size:13px;
+    padding:11px 20px;
+    white-space:nowrap;
+    box-shadow:0 6px 18px -6px rgba(55,180,224,0.5);
+  }
+
+  /* ============ RESULTS SCREEN ============ */
+  #screen-results{
+    align-items:center;
+    overflow-y:auto;
+    padding-bottom:10px;
+  }
+  .results-wrap{
+    width:100%;
+    max-width:760px;
+    margin:0 auto;
+  }
+  .results-head{
+    text-align:center;
+    margin-bottom:18px;
+  }
+  .results-head h2{
+    font-size:24px;
+    margin:0 0 4px;
+  }
+  .results-head p{
+    color:var(--text-mid);
+    font-size:13px;
+    margin:0;
+  }
+  .results-top{
+    display:flex;
+    align-items:center;
+    gap:26px;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px 26px;
+    background:linear-gradient(160deg, rgba(18,28,51,0.6), rgba(10,15,27,0.5));
+    margin-bottom:16px;
+  }
+  .ring-wrap{ flex:0 0 auto; position:relative; width:130px; height:130px; }
+  .ring-wrap svg{ transform:rotate(-90deg); }
+  .ring-label{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .ring-label .pct{ font-family:var(--mono); font-size:24px; font-weight:700; color:var(--text-hi); }
+  .ring-label .lab{ font-size:9px; letter-spacing:0.08em; color:var(--text-low); text-transform:uppercase; margin-top:2px; }
+  .results-info{ flex:1 1 auto; }
+  .score-line{
+    font-family:var(--mono);
+    font-size:26px;
+    font-weight:700;
+    color:var(--text-hi);
+    margin-bottom:4px;
+  }
+  .score-line span{ color:var(--text-low); font-size:16px; }
+  .perf-msg{ font-size:14px; color:var(--cyan); font-weight:600; }
+
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .stat-box{
+    border:1px solid var(--border-soft);
+    border-radius:var(--radius-sm);
+    padding:12px 8px;
+    text-align:center;
+    background:rgba(255,255,255,0.015);
+  }
+  .stat-box .v{ font-family:var(--mono); font-size:17px; font-weight:700; color:var(--text-hi); }
+  .stat-box .l{ font-size:9.5px; color:var(--text-low); text-transform:uppercase; letter-spacing:0.05em; margin-top:3px; }
+
+  .results-actions{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .btn-ghost{
+    border:1px solid var(--border);
+    background:rgba(255,255,255,0.02);
+    color:var(--text-hi);
+    font-size:13px;
+    padding:11px 18px;
+    flex:1;
+  }
+  .btn-ghost:hover{ border-color:var(--blue); }
+
+  .review-panel{
+    border:1px solid var(--border-soft);
+    border-radius:var(--radius);
+    padding:14px;
+  }
+  .review-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .review-head h3{ font-size:13.5px; margin:0; color:var(--text-hi); }
+  .filter-row{ display:flex; gap:6px; }
+  .filter-btn{
+    font-family:var(--mono);
+    font-size:10.5px;
+    padding:5px 10px;
+    border-radius:6px;
+    border:1px solid var(--border-soft);
+    background:transparent;
+    color:var(--text-mid);
+    cursor:pointer;
+  }
+  .filter-btn.active{ border-color:var(--cyan); color:var(--cyan); background:rgba(55,211,224,0.08); }
+
+  .review-list{
+    max-height:340px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .review-item{
+    border:1px solid var(--border-soft);
+    border-radius:8px;
+    overflow:hidden;
+  }
+  .review-item summary{
+    list-style:none;
+    cursor:pointer;
+    padding:9px 12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:12px;
+    color:var(--text-mid);
+  }
+  .review-item summary::-webkit-details-marker{ display:none; }
+  .review-item summary .rq-num{
+    font-family:var(--mono);
+    color:var(--text-low);
+    flex:0 0 auto;
+    width:34px;
+  }
+  .review-item summary .rq-text{
+    flex:1 1 auto;
+    color:var(--text-hi);
+    font-size:12.5px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .review-item summary .rq-status{
+    flex:0 0 auto;
+    font-family:var(--mono);
+    font-size:10.5px;
+    font-weight:700;
+  }
+  .review-item.correct summary .rq-status{ color:var(--green); }
+  .review-item.wrong summary .rq-status{ color:var(--red); }
+  .review-body{
+    padding:0 14px 12px 46px;
+    font-size:12px;
+    color:var(--text-mid);
+    line-height:1.5;
+  }
+  .review-body .ans-line{ margin:3px 0; }
+  .review-body .ans-line b{ color:var(--text-hi); }
+  .review-body .ok{ color:var(--green); }
+  .review-body .no{ color:var(--red); }
+  .review-body .why{ color:var(--text-low); margin-top:5px; font-size:11px; }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 760px){
+    header.top{ padding:8px 14px; }
+    .brand-text .title{ font-size:13px; }
+    main{ padding:10px 12px 12px; }
+    .stat-row, .mini-cards{ grid-template-columns:repeat(2,1fr); }
+    .results-top{ flex-direction:column; text-align:center; padding:16px; }
+    .stat-grid{ grid-template-columns:repeat(3,1fr); }
+    .options-grid{ grid-template-columns:1fr; grid-template-rows:repeat(4,1fr); }
+    .q-text{ font-size:14px; max-height:28%; }
+    .opt-card{ padding:8px 10px; font-size:12px; }
+    .question-area{ padding:14px 14px; }
+    .status-left{ font-size:11px; }
+    .badge{ font-size:10px; padding:4px 8px; }
+    .btn-next{ padding:10px 14px; font-size:12px; }
+    .feedback-row{ flex-direction:column; }
+  }
+
+  @media (max-width: 420px){
+    .stat-grid{ grid-template-columns:repeat(3,1fr); }
+    .stat-box .v{ font-size:14px; }
+  }
+
+  .visually-hidden{
+    position:absolute; width:1px; height:1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="brand">
+      <div class="brand-badge">150</div>
+      <div class="brand-text">
+        <div class="title">Revision Console</div>
+        <div class="subtitle">MCQ Revision · Practice Mode</div>
+      </div>
+    </div>
+    <div class="top-right">
+      <div class="chip">Quiz · 150 Qs</div>
+      <div class="chip"><span class="dot"></span>Offline</div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- START SCREEN -->
+    <section id="screen-start" class="screen active">
+      <div class="start-card">
+        <div class="start-eyebrow">AR / VR · CO1 &amp; CO2</div>
+        <h1>150 Question Challenge</h1>
+        <p class="desc">A focused revision console for a 150-question MCQ bank covering Augmented Reality and Virtual Reality fundamentals, system components, tracking, interaction, and human factors.</p>
+
+        <div class="stat-row">
+          <div class="stat-pill"><div class="num">150</div><div class="lab">Questions</div></div>
+          <div class="stat-pill"><div class="num">60</div><div class="lab">Minutes</div></div>
+          <div class="stat-pill"><div class="num">4</div><div class="lab">Options / Q</div></div>
+          <div class="stat-pill"><div class="num">✓</div><div class="lab">Instant Feedback</div></div>
+        </div>
+
+        <button class="btn btn-primary" id="btn-start">Start Quiz →</button>
+
+        <div class="mini-cards">
+          <div class="mini-card"><div class="mc-num">150</div><div class="mc-lab">Questions in bank</div></div>
+          <div class="mini-card"><div class="mc-num">01 → 150</div><div class="mc-lab">Sequential progression</div></div>
+          <div class="mini-card"><div class="mc-num">∞</div><div class="mc-lab">Retakes</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ SCREEN -->
+    <section id="screen-quiz" class="screen">
+      <div class="quiz-shell">
+
+        <div class="status-bar">
+          <div class="status-left">Question <b id="q-current">1</b> / <b>150</b></div>
+          <div class="status-mid">
+            <div class="badge correct">✓ <span id="score-correct">0</span> correct</div>
+            <div class="badge wrong">✕ <span id="score-wrong">0</span> wrong</div>
+            <div class="badge timer" id="timer-badge">60:00</div>
+          </div>
+        </div>
+
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+
+        <div class="nav-strip" id="nav-strip" aria-label="Question progress indicators"></div>
+
+        <div class="question-area">
+          <div class="q-meta" id="q-meta">CO1 · RECALL</div>
+          <div class="q-text" id="q-text">Loading question...</div>
+          <div class="options-grid" id="options-grid"></div>
+          <div class="feedback-row" id="feedback-row">
+            <div class="fb-text">
+              <div class="fb-status" id="fb-status">✓ Correct</div>
+              <div id="fb-correct-line"></div>
+              <div class="fb-why" id="fb-why"></div>
+            </div>
+            <button class="btn btn-next" id="btn-next">Next Question →</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- RESULTS SCREEN -->
+    <section id="screen-results" class="screen">
+      <div class="results-wrap">
+        <div class="results-head">
+          <h2 id="results-title">Quiz Complete 🎉</h2>
+          <p>Here's how your revision session went.</p>
+        </div>
+
+        <div class="results-top">
+          <div class="ring-wrap">
+            <svg width="130" height="130" viewBox="0 0 130 130">
+              <circle cx="65" cy="65" r="56" fill="none" stroke="#182238" stroke-width="10"></circle>
+              <circle id="ring-progress" cx="65" cy="65" r="56" fill="none" stroke="url(#ringGrad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="352" stroke-dashoffset="352"></circle>
+              <defs>
+                <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#37d3e0"></stop>
+                  <stop offset="100%" stop-color="#4f8cff"></stop>
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="ring-label">
+              <div class="pct" id="ring-pct">0%</div>
+              <div class="lab">Accuracy</div>
+            </div>
+          </div>
+          <div class="results-info">
+            <div class="score-line"><span id="res-score">0</span> <span>/ 150</span></div>
+            <div class="perf-msg" id="perf-msg">—</div>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-box"><div class="v" id="stat-correct">0</div><div class="l">Correct</div></div>
+          <div class="stat-box"><div class="v" id="stat-wrong">0</div><div class="l">Incorrect</div></div>
+          <div class="stat-box"><div class="v" id="stat-accuracy">0%</div><div class="l">Accuracy</div></div>
+          <div class="stat-box"><div class="v" id="stat-total">150</div><div class="l">Total Qs</div></div>
+          <div class="stat-box"><div class="v" id="stat-time">00:00</div><div class="l">Time Taken</div></div>
+        </div>
+
+        <div class="results-actions">
+          <button class="btn btn-ghost" id="btn-retake">Retake (reshuffled) →</button>
+        </div>
+
+        <div class="review-panel">
+          <div class="review-head">
+            <h3>Review Answers</h3>
+            <div class="filter-row">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="correct">Correct</button>
+              <button class="filter-btn" data-filter="wrong">Wrong</button>
+            </div>
+          </div>
+          <div class="review-list" id="review-list"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* ===================== QUESTION BANK (embedded, authoritative source) ===================== */
+const QUESTION_BANK = [{"id": 1, "question": "Identify the correct definition of Virtual Reality", "options": ["A computer-generated immersive environment", "A cloud computing platform", "A wireless communication technology", "A database management system"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 2, "question": "Which term describes a computer-generated environment that users can explore?", "options": ["Virtual Environment", "Database", "Spreadsheet", "Router"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 3, "question": "Which technology adds computer-generated information to the physical world?", "options": ["Augmented Reality", "Virtual Reality", "Cloud Storage", "File Sharing"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 4, "question": "Which technology creates a simulated environment that can surround the user?", "options": ["Virtual Reality", "Augmented Reality", "Email", "Database Management"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 5, "question": "Identify the technology that overlays digital information onto the real world.", "options": ["Augmented Reality", "Virtual Reality", "Artificial Intelligence", "Internet of Things"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 6, "question": "Which term broadly includes AR, VR, and related immersive technologies?", "options": ["Extended Reality", "Ethernet", "Bluetooth", "Cloud Computing"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 7, "question": "What is a major goal of immersive technologies?", "options": ["To provide interactive digital experiences", "To increase disk capacity", "To reduce keyboard size", "To replace databases"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 8, "question": "What does immersion describe?", "options": ["A sense of involvement in a virtual environment", "The size of a hard disk", "Processor speed", "Number of files"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 9, "question": "Recognize the primary objective of immersive technologies.", "options": ["To provide interactive digital experiences", "To improve internet speed", "To compress multimedia files", "To increase storage capacity"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 10, "question": "What does virtuality indicate?", "options": ["The degree to which an environment is computer-generated", "The size of a display", "The number of users", "Storage capacity"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 11, "question": "Which component generates virtual scenes for display?", "options": ["Rendering Engine", "Firewall", "Router", "Spreadsheet"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 12, "question": "Which component models behavior in a virtual environment?", "options": ["Simulation Engine", "Printer", "Scanner", "File Manager"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 13, "question": "Identify the device commonly used to experience Virtual Reality.", "options": ["Head-Mounted Display", "Barcode Scanner", "Laser Printer", "Projector"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 14, "question": "Which component detects user movement?", "options": ["Tracking System", "Database", "Speaker", "Projector"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 15, "question": "Which component presents a virtual scene to the user?", "options": ["Display System", "Storage System", "Network Switch", "Compiler"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 16, "question": "Which component supports interaction with virtual objects?", "options": ["Interaction Interface", "Power Supply", "File System", "Firewall"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 17, "question": "Identify one of the five classic components of a Virtual Reality system.", "options": ["Simulation Engine", "Compiler", "Firewall", "Spreadsheet"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 18, "question": "Why is VR useful for flight training?", "options": ["It can simulate realistic situations safely", "It removes user interaction", "It increases storage capacity", "It replaces aircraft"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 19, "question": "Why can AR assist equipment maintenance?", "options": ["It can overlay instructions on real equipment", "It eliminates physical equipment", "It removes sensors", "It disables user input"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 20, "question": "Which is an AR navigation example?", "options": ["Digital directions over a real-world view", "A fully simulated cockpit", "A database query", "A spreadsheet formula"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 21, "question": "Identify the component responsible for detecting user movements in a VR system.", "options": ["Tracking System", "Audio Amplifier", "Memory Card", "Router"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 22, "question": "Which is a VR training example?", "options": ["A simulated emergency environment", "A printed manual", "A database report", "A network switch"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 23, "question": "What feature is common to AR and VR?", "options": ["Interactive digital experiences", "Identical hardware in every case", "No display requirement", "No user input"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 24, "question": "What is a major difference between AR and VR?", "options": ["AR enhances the real world while VR creates a virtual environment", "VR only displays text", "AR always replaces the real world", "They are identical"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 25, "question": "Identify the role of the rendering engine in a Virtual Reality system.", "options": ["It generates virtual scenes for display", "It stores application data", "It manages internet connectivity", "It compresses files"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO1"}, {"id": 26, "question": "Which factor can make an immersive experience feel more realistic?", "options": ["Responsive interaction", "Long response delays", "No visual feedback", "Unrelated controls"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 27, "question": "What is presence most closely associated with?", "options": ["Feeling located within the virtual environment", "Amount of storage", "Processor speed", "File size"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 28, "question": "Which device commonly provides visual output for VR?", "options": ["Head-Mounted Display", "Barcode Scanner", "Laser Printer", "Network Switch"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 29, "question": "Recognize the term used to describe the feeling of being present in a virtual environment.", "options": ["Immersion", "Authentication", "Virtualization", "Synchronization"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 30, "question": "Why are displays important in immersive systems?", "options": ["They present digital scenes or information", "They store tracking coordinates", "They manage databases", "They replace sensors"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 31, "question": "Which term refers to the user's sense of being surrounded by digital content?", "options": ["Immersion", "Compression", "Encryption", "Routing"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 32, "question": "Which application can use VR to rehearse hazardous procedures?", "options": ["Training Simulation", "Email", "File Compression", "Database Backup"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 33, "question": "Identify the meaning of immersion in Virtual Reality..", "options": ["It creates a sense of presence in a virtual world", "It increases processor speed", "It improves storage capacity", "It compresses graphics"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO1"}, {"id": 34, "question": "Which application can use AR to guide a user through a location?", "options": ["Interactive Navigation", "Network Routing", "File Storage", "Antivirus Scanning"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 35, "question": "Which statement best describes immersive learning?", "options": ["It can provide interactive and engaging environments", "It eliminates assessment", "It requires no content", "It only provides printed text"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 36, "question": "What is the role of interaction in immersive technologies?", "options": ["It allows users to influence the digital experience", "It only increases storage", "It only controls printing", "It removes user input"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 37, "question": "Identify an early commercial Virtual Reality device.", "options": ["Head-Mounted Display (HMD)", "Webcam", "Printer", "Scanner"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 38, "question": "Which technology is suitable for digital labels on real machinery?", "options": ["Augmented Reality", "Virtual Reality", "Database Management", "File Compression"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 39, "question": "Which technology is suitable for a completely simulated driving environment?", "options": ["Virtual Reality", "Augmented Reality", "Email", "Cloud Storage"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 40, "question": "Which is a likely future impact of immersive technologies?", "options": ["More natural interaction with digital environments", "Elimination of all communication", "Removal of all displays", "Replacement of every computer"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 41, "question": "Distinguish Virtual Reality from Augmented Reality.", "options": ["VR creates a virtual environment, whereas AR enhances the real world", "VR and AR are identical technologies", "AR replaces the real world completely", "VR only displays text"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO1"}, {"id": 42, "question": "Which feature is important for realistic virtual training?", "options": ["Interactive simulation", "Static text only", "No user input", "Delayed feedback only"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 43, "question": "Which term describes the computer-generated setting experienced in VR?", "options": ["Virtual World", "Database Schema", "Network Topology", "File Directory"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 44, "question": "What is the purpose of a simulation engine?", "options": ["To model behavior and interactions", "To manage Wi-Fi passwords", "To print documents", "To store photographs"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 45, "question": "Recognize the feature common to both AR and VR technologies.", "options": ["Both provide immersive user experiences", "Both require wired communication", "Both operate without displays", "Both use barcode scanners"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 46, "question": "Which feature presents digital content in relation to a real object?", "options": ["Contextual Overlay", "File Compression", "Password Authentication", "Disk Formatting"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 47, "question": "What makes VR different from ordinary video?", "options": ["VR can provide interactive and immersive experiences", "VR always uses paper displays", "VR cannot respond to users", "VR only displays photographs"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 48, "question": "Which application demonstrates VR in education?", "options": ["A virtual laboratory", "A physical printer", "A database backup", "A spreadsheet editor"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 49, "question": "Predict why Augmented Reality is widely used in maintenance applications..", "options": ["It overlays digital instructions onto real equipment", "It replaces all physical machines", "It stores maintenance records", "It improves processor speed"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO1"}, {"id": 50, "question": "Which application demonstrates AR in education?", "options": ["Digital annotations over a physical textbook", "A simulated world replacing the classroom", "A file compressor", "A database index"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 51, "question": "Which component creates computer-generated images for display?", "options": ["Rendering Engine", "Tracking System", "Data Glove", "Navigation Interface"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 52, "question": "Which component represents rules and behavior of virtual objects?", "options": ["Simulation Engine", "Display Screen", "Router", "Keyboard"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 53, "question": "Identify an application of Virtual Reality.", "options": ["Flight simulation", "Email communication", "Spreadsheet processing", "Database backup"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 54, "question": "Which statement best describes an immersive system?", "options": ["It integrates digital content with user interaction and sensory feedback", "It only stores data", "It only prints documents", "It avoids user input"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 55, "question": "Which term describes digital content placed over a real-world view?", "options": ["Overlay", "Virtualization", "Compression", "Authentication"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 56, "question": "Which term describes the feeling of being inside a virtual world?", "options": ["Presence", "Storage", "Routing", "Indexing"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 57, "question": "Identify an application of Augmented Reality.", "options": ["Interactive navigation", "Network routing", "File compression", "Antivirus scanning"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 58, "question": "Which design feature can improve the sense of presence?", "options": ["Consistent and responsive feedback", "Long delays", "Inaccurate tracking", "Static interaction"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 59, "question": "Why are immersive technologies useful for simulation?", "options": ["They can model situations difficult or costly to reproduce physically", "They remove interaction", "They require no software", "They only store files"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 60, "question": "Which example is primarily VR?", "options": ["A virtual museum that replaces the surrounding view", "A navigation arrow over a road", "A digital label on a machine", "A virtual arrow over a real object"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 61, "question": "Identify how immersive technologies improve learning experiences.", "options": ["They provide interactive and engaging environments", "They reduce internet bandwidth", "They replace classroom furniture", "They eliminate examinations"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO1"}, {"id": 62, "question": "Which example is primarily AR?", "options": ["A virtual instruction displayed over a real machine", "A fully simulated aircraft cockpit", "A virtual planetarium", "A completely simulated city"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 63, "question": "Which concept concerns how strongly a user feels part of a virtual environment?", "options": ["Immersion", "Compression", "Routing", "Authentication"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 64, "question": "Which statement about AR is appropriate?", "options": ["It can combine real-world views with computer-generated information", "It always removes the real world", "It cannot use tracking", "It only works with printed images"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 65, "question": "Recognize the meaning of virtuality.", "options": ["The extent to which an environment is computer-generated", "The amount of computer memory", "The size of a display screen", "The speed of a processor"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 66, "question": "Which statement about VR is appropriate?", "options": ["It can create a simulated environment for interactive experience", "It only overlays text on paper", "It never tracks users", "It only displays database records"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO1"}, {"id": 67, "question": "Which component creates the scene before it is displayed?", "options": ["Rendering Engine", "Data Glove", "Motion Tracker", "Navigation Interface"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 68, "question": "Which component detects movement rather than displaying it?", "options": ["Tracking System", "Rendering Engine", "Display System", "Simulation Engine"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 69, "question": "Identify the technology that combines AR, VR, and related immersive technologies.", "options": ["Extended Reality", "Bluetooth", "Cloud Storage", "Ethernet"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 70, "question": "Which component models virtual-world behavior?", "options": ["Simulation Engine", "Display System", "Data Glove", "Router"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO1"}, {"id": 71, "question": "Which application best demonstrates immersive technology in training?", "options": ["A realistic emergency simulation", "A word processor", "A file archive", "A spreadsheet"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 72, "question": "Which application best demonstrates AR in maintenance?", "options": ["Step-by-step instructions aligned with physical equipment", "A simulated factory replacing the real view", "A database report", "A file manager"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 73, "question": "Identify the future impact of immersive technologies on human experience.", "options": ["They enable more natural interaction with digital environments", "They replace all communication networks", "They eliminate mobile devices", "They reduce software development"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO1"}, {"id": 74, "question": "Which application best demonstrates VR in healthcare training?", "options": ["A simulated clinical environment", "A printer queue", "A database table", "A network monitor"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO1"}, {"id": 75, "question": "What does a position tracker determine?", "options": ["The user's position and orientation", "The file size", "The network password", "The display brand"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 76, "question": "What is motion tracking?", "options": ["Monitoring movement of the user or an object", "Increasing display brightness", "Compressing audio", "Storing documents"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 77, "question": "Recognize the primary purpose of Virtual Reality in training applications.", "options": ["To simulate realistic environments safely", "To increase internet speed", "To compress multimedia data", "To improve database performance"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO1"}, {"id": 78, "question": "Why is motion tracking important in VR?", "options": ["It supports responsive interaction", "It increases hard-disk capacity", "It replaces rendering", "It removes displays"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 79, "question": "Which sensor is commonly used to measure motion and orientation?", "options": ["Inertial Measurement Unit", "Temperature Sensor", "Pressure Sensor", "Microphone"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 80, "question": "What does an IMU commonly measure?", "options": ["Acceleration and angular motion", "File size and storage", "Network packets", "Screen resolution"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 81, "question": "Identify the primary purpose of a position tracker in a Virtual Reality system.", "options": ["To determine the position and orientation of the user", "To increase the display resolution", "To store application data", "To compress multimedia files"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 82, "question": "What does an orientation tracker estimate?", "options": ["The rotation of the user or device", "The number of files", "Display brightness", "Database size"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 83, "question": "Which interface enables movement through virtual space?", "options": ["Navigation Interface", "Storage Interface", "Printing Interface", "Database Interface"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 84, "question": "What is the purpose of a navigation interface?", "options": ["To allow movement within a virtual environment", "To generate database reports", "To manage files", "To print images"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 85, "question": "Recognize the device commonly used to monitor user movement in immersive environments.", "options": ["Motion Tracker", "Barcode Scanner", "Laser Printer", "Network Switch"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 86, "question": "Which navigation technique uses physical walking in a tracked area?", "options": ["Walking-based Navigation", "File Navigation", "Browser Navigation", "Menu Navigation"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 87, "question": "What does locomotion mean in VR?", "options": ["Movement through a virtual environment", "Rendering a texture", "Recording audio", "Saving a file"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 88, "question": "Which interface is used to manipulate virtual objects?", "options": ["Manipulation Interface", "Network Interface", "Storage Interface", "Printing Interface"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 89, "question": "Identify the sensor commonly used for tracking orientation in VR systems.", "options": ["Inertial Measurement Unit", "Temperature Sensor", "Pressure Sensor", "Light Sensor"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 90, "question": "What does object manipulation allow?", "options": ["Interaction with virtual objects", "Increased network bandwidth", "Disk formatting", "Display replacement"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 91, "question": "Which input device captures hand and finger movements?", "options": ["Data Glove", "Laser Printer", "Projector", "Router"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 92, "question": "What information can a data glove provide?", "options": ["Hand and finger movement information", "Internet speed", "Disk capacity", "Printer status"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 93, "question": "Identify the purpose of motion tracking in immersive technologies.", "options": ["It enables accurate monitoring of user movements", "It increases storage capacity", "It improves internet connectivity", "It compresses virtual objects"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO2"}, {"id": 94, "question": "Which interaction method uses body movement as input?", "options": ["Gesture Interface", "File Interface", "Storage Interface", "Database Interface"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 95, "question": "What is gesture recognition used for?", "options": ["Interpreting hand or body movements as commands", "Compressing virtual scenes", "Increasing battery capacity", "Managing databases"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 96, "question": "Which is an example of gesture interaction?", "options": ["Using a hand movement to select a virtual object", "Printing a document", "Saving a spreadsheet", "Changing a router password"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 97, "question": "Recognize the interface that enables users to move through a virtual environment.", "options": ["Navigation Interface", "Audio Interface", "Display Interface", "Network Interface"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 98, "question": "Why can natural interaction techniques be useful?", "options": ["They can make interaction more intuitive", "They eliminate tracking", "They remove feedback", "They prevent movement"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 99, "question": "Which human sensory system contributes strongly to balance?", "options": ["Vestibular System", "Digestive System", "Respiratory System", "Circulatory System"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 100, "question": "What is the primary role of the vestibular system?", "options": ["Supporting balance and sensing head movement", "Processing database queries", "Generating graphics", "Storing audio"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 101, "question": "Identify the interface used to interact with and manipulate virtual objects.", "options": ["Manipulation Interface", "Communication Interface", "Storage Interface", "Printing Interface"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 102, "question": "Why is human perception important in immersive systems?", "options": ["Users interpret sensory information through perception", "It increases disk capacity", "It manages routing", "It replaces the display"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 103, "question": "Which visual cue supports depth perception?", "options": ["Binocular Vision", "Color Blindness", "File Compression", "Audio Encoding"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 104, "question": "Why does binocular vision support depth perception?", "options": ["The brain can compare the slightly different views from the two eyes", "It increases processor speed", "It stores tracking data", "It reduces display size"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 105, "question": "Identify the function of navigation interfaces in Virtual Reality.", "options": ["They allow users to move within virtual environments", "They increase processor speed", "They store virtual scenes", "They compress graphical data"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO2"}, {"id": 106, "question": "Which capability helps a user interpret and respond to a virtual scene?", "options": ["Cognition", "Battery Capacity", "Disk Space", "Printer Speed"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 107, "question": "What is cognition in VR?", "options": ["Mental processing used to understand and respond to experiences", "Display resolution", "Network bandwidth", "Storage format"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 108, "question": "Why should VR interfaces consider cognition?", "options": ["Information should be understandable and usable", "Cognition controls the graphics card", "Cognition replaces tracking", "Cognition eliminates interaction"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 109, "question": "Recognize the input device designed to capture hand and finger movements.", "options": ["Data Glove", "Webcam", "Keyboard", "Printer"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 110, "question": "What is latency in an immersive system?", "options": ["Delay between input or movement and system response", "Storage capacity", "Display size", "Number of virtual objects"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 111, "question": "Why is low latency important in VR?", "options": ["It supports responsive interaction and comfort", "It increases file size", "It removes tracking", "It improves printer performance"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 112, "question": "What can high motion-to-display delay cause?", "options": ["A less responsive experience", "More storage capacity", "Better tracking accuracy", "Faster rendering"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 113, "question": "Identify the primary function of a data glove.", "options": ["To detect hand and finger movements", "To display virtual images", "To improve network performance", "To store tracking data"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 114, "question": "Which combination best supports responsive VR interaction?", "options": ["Accurate tracking and low latency", "High latency and poor tracking", "No tracking and no feedback", "Static images and delayed input"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 115, "question": "If a user's head turns but the virtual view does not update, which subsystem should be checked?", "options": ["Tracking System", "File System", "Database", "Printer"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 116, "question": "If a user can move but cannot select a virtual object, which interface is relevant?", "options": ["Manipulation Interface", "Navigation Interface", "Storage Interface", "Network Interface"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 117, "question": "Identify the purpose of gesture interfaces in immersive systems.", "options": ["They enable natural interaction through body movements", "They increase battery capacity", "They reduce display brightness", "They improve internet speed"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO2"}, {"id": 118, "question": "If a VR system responds slowly to head movement, which factor should be investigated?", "options": ["Latency", "File naming", "Printer speed", "Database size"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 119, "question": "If a user has difficulty maintaining balance in VR, which human system is relevant?", "options": ["Vestibular System", "Digestive System", "Circulatory System", "Respiratory System"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 120, "question": "Which combination represents effective VR interaction?", "options": ["Tracking, navigation, manipulation, and timely feedback", "Storage, printing, and file compression", "Database indexing and routing", "No tracking and delayed feedback"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 121, "question": "Recognize the type of interaction supported by gesture interfaces.", "options": ["Hand and body gesture recognition", "Voice-only communication", "Optical character recognition", "File management"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 122, "question": "Which input method is suitable for hand posture information?", "options": ["Data Glove", "Projector", "Printer", "Router"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 123, "question": "Which technique is suitable for selecting an object through hand movement?", "options": ["Gesture-based Interaction", "File Navigation", "Database Indexing", "Network Routing"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 124, "question": "Identify the human sensory system responsible for maintaining body balance.", "options": ["Vestibular System", "Respiratory System", "Digestive System", "Circulatory System"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 125, "question": "Which technique is suitable for moving through a large virtual scene?", "options": ["Navigation Interface", "Data Storage Interface", "Printing Interface", "Database Interface"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 126, "question": "What is the difference between tracking and navigation?", "options": ["Tracking detects position or movement, while navigation supports movement through virtual space", "Tracking prints while navigation stores", "Tracking renders while navigation compresses", "They are identical"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 127, "question": "Identify the importance of low latency in Virtual Reality systems.", "options": ["It improves user comfort and immersion", "It increases file size", "It reduces storage space", "It improves printer performance"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO2"}, {"id": 128, "question": "What is the difference between navigation and manipulation?", "options": ["Navigation moves the user; manipulation acts on virtual objects", "Navigation changes files; manipulation prints", "Navigation stores data; manipulation tracks", "They are identical"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 129, "question": "Which scenario best demonstrates motion tracking?", "options": ["A virtual camera follows the user's head movement", "A printer produces a report", "A database sorts records", "A file is compressed"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 130, "question": "Recognize the visual cue that helps humans perceive depth.", "options": ["Binocular Vision", "Color Blindness", "Peripheral Vision", "Night Vision"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 131, "question": "Which scenario best demonstrates manipulation?", "options": ["A user picks up and rotates a virtual object", "A user moves through a virtual corridor", "A sensor measures temperature", "A display renders a scene"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 132, "question": "Which scenario best demonstrates navigation?", "options": ["A user moves from one virtual room to another", "A user changes object color", "A tracker measures orientation", "A display generates a frame"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 133, "question": "Identify the role of human perception in immersive technologies.", "options": ["It enables users to interpret virtual environments effectively", "It increases processor performance", "It manages databases", "It compresses multimedia files"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO2"}, {"id": 134, "question": "Which scenario best demonstrates gesture recognition?", "options": ["A system interprets a hand wave as a command", "A system stores a video", "A system renders a texture", "A system compresses an image"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 135, "question": "Which scenario best demonstrates cognition?", "options": ["A user understands an instruction and decides how to respond", "A sensor measures acceleration", "A display refreshes", "A database stores a record"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 136, "question": "Recognize the navigation technique that allows users to move naturally within a tracked space.", "options": ["Walking-based Navigation", "Menu Navigation", "File Navigation", "Browser Navigation"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 137, "question": "Which scenario best demonstrates perception?", "options": ["A user interprets depth and visual information", "A router forwards packets", "A disk stores data", "A printer creates a page"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 138, "question": "Which design choice can improve natural interaction?", "options": ["Using suitable gesture or hand-tracking input", "Removing all feedback", "Increasing response delay", "Disabling tracking"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 139, "question": "Identify the factor that influences how users understand and respond to virtual environments.", "options": ["Cognition", "Battery Capacity", "Processor Speed", "Hard Disk Size"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 140, "question": "Which design choice can improve comfort in VR?", "options": ["Reducing system response latency", "Increasing input delay", "Removing motion feedback", "Using inaccurate tracking"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 141, "question": "Which design choice can improve responsiveness?", "options": ["Accurate and timely tracking updates", "Delayed tracking updates", "No orientation data", "Static user position"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}, {"id": 142, "question": "Identify the role of cognition in Virtual Reality systems.", "options": ["It helps users process and respond to virtual experiences", "It improves wireless communication", "It increases display resolution", "It stores application data"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO2"}, {"id": 143, "question": "Why should tracking and rendering work together?", "options": ["The rendered view should reflect current user movement", "Rendering should ignore movement", "Tracking should only store files", "Rendering should disable interaction"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 144, "question": "What happens when tracking accuracy is poor?", "options": ["Virtual responses may not match real movement", "Storage capacity increases", "Latency becomes zero", "The display becomes brighter"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 145, "question": "Recognize the component that captures the physical movement of a user in a VR environment.", "options": ["Motion Tracker", "Display Screen", "Graphics Card", "Speaker"], "correct": 0, "explanation": "Original source question | Bloom's Level: R | Mapping: CO2"}, {"id": 146, "question": "Which information can a motion tracker provide?", "options": ["Position and/or orientation", "File names", "Database records", "Printer settings"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 147, "question": "Which information can a data glove provide?", "options": ["Finger and hand movements", "Network packets", "Screen brightness", "Compression ratio"], "correct": 0, "explanation": "Additional question | Bloom's Level: R | Mapping: CO2"}, {"id": 148, "question": "Identify why accurate motion tracking is important in immersive technologies.", "options": ["It provides realistic and responsive user interaction", "It increases storage capacity", "It reduces software updates", "It improves battery charging speed"], "correct": 0, "explanation": "Original source question | Bloom's Level: U | Mapping: CO2"}, {"id": 149, "question": "Which human factors should be considered in VR interaction design?", "options": ["Perception and cognition", "Printer model", "File extension", "Database size"], "correct": 0, "explanation": "Additional question | Bloom's Level: U | Mapping: CO2"}, {"id": 150, "question": "Which combination shows perception and cognition working together?", "options": ["Perceiving a virtual cue and deciding how to respond", "Printing and deleting a file", "Routing and compressing a packet", "Charging and formatting a disk"], "correct": 0, "explanation": "Additional question | Bloom's Level: A | Mapping: CO2"}];
+
+</script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- CONFIG ---------- */
+  const QUIZ_TIME_LIMIT = 60 * 60; // seconds — change this to adjust the quiz duration
+  const WARN_THRESHOLD = 5 * 60;   // seconds remaining when timer turns yellow
+
+  /* ---------- STATE ---------- */
+  let sessionQuestions = [];   // shuffled copy of QUESTION_BANK for this session, options also shuffled
+  let currentIndex = 0;
+  let correctCount = 0;
+  let wrongCount = 0;
+  let answers = [];            // per-question record: {answeredIndex, correct}
+  let timeRemaining = QUIZ_TIME_LIMIT;
+  let timerInterval = null;
+  let quizStartTs = null;
+  let quizEndTs = null;
+  let locked = false;          // true once current question has been answered
+  let reviewFilter = 'all';
+
+  /* ---------- DOM ---------- */
+  const screenStart = document.getElementById('screen-start');
+  const screenQuiz = document.getElementById('screen-quiz');
+  const screenResults = document.getElementById('screen-results');
+
+  const btnStart = document.getElementById('btn-start');
+  const btnNext = document.getElementById('btn-next');
+  const btnRetake = document.getElementById('btn-retake');
+
+  const qCurrentEl = document.getElementById('q-current');
+  const scoreCorrectEl = document.getElementById('score-correct');
+  const scoreWrongEl = document.getElementById('score-wrong');
+  const timerBadge = document.getElementById('timer-badge');
+  const progressFill = document.getElementById('progress-fill');
+  const navStrip = document.getElementById('nav-strip');
+  const qMetaEl = document.getElementById('q-meta');
+  const qTextEl = document.getElementById('q-text');
+  const optionsGrid = document.getElementById('options-grid');
+  const feedbackRow = document.getElementById('feedback-row');
+  const fbStatus = document.getElementById('fb-status');
+  const fbCorrectLine = document.getElementById('fb-correct-line');
+  const fbWhy = document.getElementById('fb-why');
+
+  const ringProgress = document.getElementById('ring-progress');
+  const ringPct = document.getElementById('ring-pct');
+  const resScore = document.getElementById('res-score');
+  const perfMsg = document.getElementById('perf-msg');
+  const statCorrect = document.getElementById('stat-correct');
+  const statWrong = document.getElementById('stat-wrong');
+  const statAccuracy = document.getElementById('stat-accuracy');
+  const statTotal = document.getElementById('stat-total');
+  const statTime = document.getElementById('stat-time');
+  const reviewList = document.getElementById('review-list');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+
+  const LETTERS = ['A','B','C','D'];
+
+  /* ---------- UTIL ---------- */
+  function shuffleArray(array){
+    const a = [...array];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function formatTime(totalSeconds){
+    const s = Math.max(0, Math.floor(totalSeconds));
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return String(m).padStart(2,'0') + ':' + String(sec).padStart(2,'0');
+  }
+
+  function parseMeta(explanation){
+    // explanation like "Original source question | Bloom's Level: R | Mapping: CO1"
+    const parts = (explanation || '').split('|').map(p => p.trim());
+    return parts.join(' · ');
+  }
+
+  /* ---------- SESSION SETUP ---------- */
+  function buildSession(){
+    const shuffledQuestions = shuffleArray(QUESTION_BANK);
+    sessionQuestions = shuffledQuestions.map(q => {
+      const optionObjs = q.options.map((text, idx) => ({ text, isCorrect: idx === q.correct }));
+      const shuffledOpts = shuffleArray(optionObjs);
+      const newCorrectIndex = shuffledOpts.findIndex(o => o.isCorrect);
+      return {
+        id: q.id,
+        question: q.question,
+        options: shuffledOpts.map(o => o.text),
+        correct: newCorrectIndex,
+        explanation: q.explanation
+      };
+    });
+    currentIndex = 0;
+    correctCount = 0;
+    wrongCount = 0;
+    answers = new Array(sessionQuestions.length).fill(null);
+    timeRemaining = QUIZ_TIME_LIMIT;
+    locked = false;
+  }
+
+  /* ---------- NAV STRIP ---------- */
+  function buildNavStrip(){
+    navStrip.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    sessionQuestions.forEach((q, i) => {
+      const el = document.createElement('div');
+      el.className = 'nav-num';
+      el.id = 'nav-num-' + i;
+      el.textContent = String(i+1).padStart(2,'0');
+      el.setAttribute('role','img');
+      el.setAttribute('aria-label', 'Question ' + (i+1) + (answers[i] ? (answers[i].correct ? ' answered correctly' : ' answered incorrectly') : ' not answered'));
+      frag.appendChild(el);
+    });
+    navStrip.appendChild(frag);
+  }
+
+  function updateNavStrip(){
+    sessionQuestions.forEach((q, i) => {
+      const el = document.getElementById('nav-num-' + i);
+      if (!el) return;
+      el.classList.remove('current','answered');
+      if (i === currentIndex) el.classList.add('current');
+      if (answers[i]) el.classList.add('answered');
+    });
+    const currentEl = document.getElementById('nav-num-' + currentIndex);
+    if (currentEl && currentEl.scrollIntoView) {
+      currentEl.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+    }
+  }
+
+  /* ---------- TIMER ---------- */
+  function startTimer(){
+    quizStartTs = Date.now();
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+      timeRemaining--;
+      updateTimerDisplay();
+      if (timeRemaining <= 0){
+        clearInterval(timerInterval);
+        timerInterval = null;
+        finishQuiz(true);
+      }
+    }, 1000);
+  }
+
+  function stopTimer(){
+    if (timerInterval){
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  }
+
+  function updateTimerDisplay(){
+    timerBadge.textContent = formatTime(timeRemaining);
+    if (timeRemaining <= WARN_THRESHOLD){
+      timerBadge.classList.add('warn');
+    } else {
+      timerBadge.classList.remove('warn');
+    }
+  }
+
+  /* ---------- RENDER QUESTION ---------- */
+  function renderQuestion(){
+    const q = sessionQuestions[currentIndex];
+    locked = !!answers[currentIndex];
+
+    qCurrentEl.textContent = currentIndex + 1;
+    qMetaEl.textContent = parseMeta(q.explanation);
+    qTextEl.textContent = q.question;
+
+    progressFill.style.width = (((currentIndex) / sessionQuestions.length) * 100) + '%';
+
+    optionsGrid.innerHTML = '';
+    q.options.forEach((optText, idx) => {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.className = 'opt-card';
+      card.setAttribute('data-idx', idx);
+      card.setAttribute('aria-label', LETTERS[idx] + ': ' + optText);
+
+      const letter = document.createElement('div');
+      letter.className = 'opt-letter';
+      letter.textContent = LETTERS[idx];
+
+      const label = document.createElement('div');
+      label.className = 'opt-label';
+      label.textContent = optText;
+
+      card.appendChild(letter);
+      card.appendChild(label);
+      card.addEventListener('click', () => handleAnswer(idx));
+      optionsGrid.appendChild(card);
+    });
+
+    feedbackRow.classList.remove('show');
+
+    if (answers[currentIndex]){
+      applyAnsweredState();
+    }
+
+    updateNavStrip();
+    updateScoreDisplay();
+  }
+
+  function updateScoreDisplay(){
+    scoreCorrectEl.textContent = correctCount;
+    scoreWrongEl.textContent = wrongCount;
+  }
+
+  /* ---------- ANSWER HANDLING ---------- */
+  function handleAnswer(selectedIdx){
+    if (locked) return;
+    const q = sessionQuestions[currentIndex];
+    const isCorrect = selectedIdx === q.correct;
+
+    answers[currentIndex] = { selected: selectedIdx, correct: isCorrect };
+    locked = true;
+
+    if (isCorrect){ correctCount++; } else { wrongCount++; }
+    updateScoreDisplay();
+
+    applyAnsweredState();
+    updateNavStrip();
+  }
+
+  function applyAnsweredState(){
+    const q = sessionQuestions[currentIndex];
+    const record = answers[currentIndex];
+    const cards = optionsGrid.querySelectorAll('.opt-card');
+
+    cards.forEach(card => {
+      const idx = parseInt(card.getAttribute('data-idx'), 10);
+      card.classList.add('locked');
+      if (idx === q.correct){
+        card.classList.add('correct');
+      } else if (record && idx === record.selected && !record.correct){
+        card.classList.add('wrong');
+      } else {
+        card.classList.add('muted');
+      }
+    });
+
+    fbStatus.textContent = record.correct ? '✓ Correct' : '✕ Incorrect';
+    fbStatus.className = 'fb-status ' + (record.correct ? 'ok' : 'no');
+    fbCorrectLine.innerHTML = 'Correct answer: <b>' + LETTERS[q.correct] + '. ' + escapeHtml(q.options[q.correct]) + '</b>';
+    fbWhy.textContent = 'Ref: ' + parseMeta(q.explanation);
+
+    feedbackRow.classList.add('show');
+
+    btnNext.textContent = (currentIndex === sessionQuestions.length - 1) ? 'View Results →' : 'Next Question →';
+  }
+
+  function escapeHtml(str){
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  /* ---------- NAVIGATION ---------- */
+  btnNext.addEventListener('click', () => {
+    if (!answers[currentIndex]) return; // must answer first
+    if (currentIndex === sessionQuestions.length - 1){
+      finishQuiz(false);
+    } else {
+      currentIndex++;
+      renderQuestion();
+    }
+  });
+
+  /* ---------- START / FINISH ---------- */
+  btnStart.addEventListener('click', () => {
+    buildSession();
+    buildNavStrip();
+    showScreen('quiz');
+    renderQuestion();
+    startTimer();
+  });
+
+  btnRetake.addEventListener('click', () => {
+    buildSession();
+    buildNavStrip();
+    showScreen('quiz');
+    renderQuestion();
+    startTimer();
+  });
+
+  function finishQuiz(autoSubmitted){
+    stopTimer();
+    quizEndTs = Date.now();
+    progressFill.style.width = '100%';
+    renderResults(autoSubmitted);
+    showScreen('results');
+  }
+
+  function showScreen(name){
+    [screenStart, screenQuiz, screenResults].forEach(s => s.classList.remove('active'));
+    if (name === 'start') screenStart.classList.add('active');
+    if (name === 'quiz') screenQuiz.classList.add('active');
+    if (name === 'results') screenResults.classList.add('active');
+  }
+
+  /* ---------- RESULTS ---------- */
+  function renderResults(autoSubmitted){
+    const total = sessionQuestions.length;
+    const answeredCount = correctCount + wrongCount;
+    const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+
+    resScore.textContent = correctCount;
+    ringPct.textContent = pct + '%';
+    statCorrect.textContent = correctCount;
+    statWrong.textContent = wrongCount;
+    statAccuracy.textContent = pct + '%';
+    statTotal.textContent = total;
+
+    const elapsedSec = quizStartTs ? Math.round((quizEndTs - quizStartTs)/1000) : (QUIZ_TIME_LIMIT - timeRemaining);
+    statTime.textContent = formatTime(elapsedSec);
+
+    const circumference = 352;
+    const offset = circumference - (circumference * pct / 100);
+    ringProgress.style.strokeDashoffset = offset;
+
+    let msg;
+    if (pct >= 90) msg = 'Outstanding! 🏆';
+    else if (pct >= 80) msg = 'Excellent work! 🎉';
+    else if (pct >= 70) msg = 'Great job! 👍';
+    else if (pct >= 50) msg = 'Good effort! Keep practicing. 💪';
+    else msg = 'Keep learning — you can improve! 🚀';
+    perfMsg.textContent = msg + (autoSubmitted ? ' (Time expired — auto-submitted)' : '');
+
+    document.getElementById('results-title').textContent = 'Quiz Complete 🎉';
+
+    renderReview();
+  }
+
+  function renderReview(){
+    reviewList.innerHTML = '';
+    const frag = document.createDocumentFragment();
+
+    sessionQuestions.forEach((q, i) => {
+      const record = answers[i];
+      const isCorrect = record ? record.correct : false;
+      const isAnswered = !!record;
+
+      if (reviewFilter === 'correct' && !isCorrect) return;
+      if (reviewFilter === 'wrong' && isCorrect) return;
+
+      const details = document.createElement('details');
+      details.className = 'review-item ' + (isAnswered ? (isCorrect ? 'correct' : 'wrong') : 'wrong');
+
+      const summary = document.createElement('summary');
+      summary.innerHTML =
+        '<span class="rq-num">Q' + String(i+1).padStart(3,'0') + '</span>' +
+        '<span class="rq-text">' + escapeHtml(q.question) + '</span>' +
+        '<span class="rq-status">' + (isAnswered ? (isCorrect ? '✓ CORRECT' : '✕ WRONG') : '— SKIPPED') + '</span>';
+
+      const body = document.createElement('div');
+      body.className = 'review-body';
+
+      const yourAnsText = isAnswered ? (LETTERS[record.selected] + '. ' + q.options[record.selected]) : 'Not answered';
+      const correctAnsText = LETTERS[q.correct] + '. ' + q.options[q.correct];
+
+      body.innerHTML =
+        '<div class="ans-line">Your answer: <b class="' + (isAnswered ? (isCorrect ? 'ok' : 'no') : '') + '">' + escapeHtml(yourAnsText) + '</b></div>' +
+        '<div class="ans-line">Correct answer: <b class="ok">' + escapeHtml(correctAnsText) + '</b></div>' +
+        '<div class="why">Ref: ' + escapeHtml(parseMeta(q.explanation)) + '</div>';
+
+      details.appendChild(summary);
+      details.appendChild(body);
+      frag.appendChild(details);
+    });
+
+    reviewList.appendChild(frag);
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      reviewFilter = btn.getAttribute('data-filter');
+      renderReview();
+    });
+  });
+
+  /* ---------- KEYBOARD ACCESSIBILITY ---------- */
+  document.addEventListener('keydown', (e) => {
+    if (!screenQuiz.classList.contains('active')) return;
+    if (['1','2','3','4'].includes(e.key)){
+      const idx = parseInt(e.key,10) - 1;
+      if (!locked) handleAnswer(idx);
+    } else if (e.key === 'Enter'){
+      if (answers[currentIndex]) btnNext.click();
+    }
+  });
+
+})();
+
+</script>
+</body>
+</html>
